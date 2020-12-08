@@ -10,6 +10,8 @@ namespace Shos.Collections
         abstract class Action
         {
             public IList<TElement> Container { get; set; }
+            public TElement Element { get; set; }
+            public int Index { get; set; }
 
             public abstract void Undo();
             public abstract void Redo();
@@ -17,27 +19,22 @@ namespace Shos.Collections
 
         class AddAction : Action
         {
-            public TElement NewElement { get; set; }
-
-            public override void Undo() => Container.Remove(NewElement);
-            public override void Redo() => Container.Add(NewElement);
+            public override void Undo() => Container.Remove(Element);
+            public override void Redo() => Container.Add(Element);
         }
 
         class RemoveAction : Action
         {
-            public TElement OldElement { get; set; }
-
-            public override void Undo() => Container.Add(OldElement);
-            public override void Redo() => Container.Remove(OldElement);
+            public override void Undo() => Container.Add(Element);
+            public override void Redo() => Container.Remove(Element);
         }
 
         class ExchangeAction : Action
         {
             public TElement OldElement { get; set; }
-            public TElement NewElement { get; set; }
 
-            public override void Undo() => Container[Container.IndexOf(NewElement)] = OldElement;
-            public override void Redo() => Container[Container.IndexOf(OldElement)] = NewElement;
+            public override void Undo() => Container[Container.IndexOf(Element)] = OldElement;
+            public override void Redo() => Container[Container.IndexOf(OldElement)] = Element;
         }
 
         class ActionCollection : Action, IEnumerable<Action>
@@ -90,7 +87,7 @@ namespace Shos.Collections
         public TElement this[int index] {
             get => List[index];
             set {
-                Add(new ExchangeAction { Container = List, OldElement = List[index], NewElement = value });
+                Add(new ExchangeAction { Container = List, OldElement = List[index], Element = value });
                 List[index] = value;
             }
         }
@@ -130,7 +127,7 @@ namespace Shos.Collections
 
         public void Add(TElement element)
         {
-            Add(new AddAction { Container = List, NewElement = element });
+            Add(new AddAction { Container = List, Element = element });
             List.Add(element);
         }
 
@@ -138,7 +135,7 @@ namespace Shos.Collections
         {
             var actionCollection = new ActionCollection { Container = List };
             for (var index = List.Count - 1; index >= 0; index--)
-                actionCollection.Add(new RemoveAction { Container = List, OldElement = List[index] });
+                actionCollection.Add(new RemoveAction { Container = List, Element = List[index] });
             Add(actionCollection);
             List.Clear();
         }
@@ -153,13 +150,13 @@ namespace Shos.Collections
 
         public void Insert(int index, TElement element)
         {
-            Add(new AddAction { Container = List, NewElement = element });
+            Add(new AddAction { Container = List, Element = element });
             List.Insert(index, element);
         }
 
         public bool Remove(TElement element)
         {
-            Add(new RemoveAction { Container = List, OldElement = element });
+            Add(new RemoveAction { Container = List, Element = element });
             return List.Remove(element);
         }
 
