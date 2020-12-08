@@ -2,15 +2,25 @@
 
 List and [ObservableCollection](https://docs.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1) which support undo/redo.
 
+## Projects
+
+* Shos.UndoRedoList
+
+Types for undo/redo support.
+
+* Shos.UndoRedoList.Tests
+
+Tests for Shos.UndoRedoList.
+
 ## Types
 
 ### class [UndoRedoList<TElement, TList>](Shos.UndoRedoList/UndoRedoList) : IList<TElement> where TList : IList<TElement>, new()
 
-List which support undo/redo.
+List which supports undo/redo.
 
 ### class [UndoRedoObservableCollection<TElement>](Shos.UndoRedoList/UndoRedoObservableCollection) : UndoRedoList<TElement, ObservableCollection<TElement>>, INotifyCollectionChanged
 
-[ObservableCollection](https://docs.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1) which support undo/redo.
+[ObservableCollection](https://docs.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1) which supports undo/redo.
 
 ### class [RingBuffer<TElement>](Shos.UndoRedoList/RingBuffer.cs) : IEnumerable<TElement>
 

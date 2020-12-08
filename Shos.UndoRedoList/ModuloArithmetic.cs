@@ -8,6 +8,7 @@ namespace Shos.Collections
 
         int value;
 
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when setting value is less than 0 or (Divisor or more).</exception>
         public int Value {
             get => value;
             set {
@@ -25,6 +26,7 @@ namespace Shos.Collections
         int PreviousValue => Value == 0 ? Value + Divisor - 1 : Value - 1;
         int NextValue     => (Value + 1) % Divisor;
 
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when divisor is 1 or less.</exception>
         public ModuloArithmetic(int divisor = DefaultDivisor, bool isValid = true)
         {
             if (divisor <= 1)
@@ -50,6 +52,8 @@ namespace Shos.Collections
         public static bool operator !=(int value, ModuloArithmetic item) => !(value == item);
         public static ModuloArithmetic operator ++(ModuloArithmetic item) => new ModuloArithmetic(item.Divisor) { Value = item.NextValue     };
         public static ModuloArithmetic operator --(ModuloArithmetic item) => new ModuloArithmetic(item.Divisor) { Value = item.PreviousValue };
+
+        /// <exception cref="System.InvalidOperationException">Thrown when item1.Divisor and item2.Divisor are different.</exception>
         public static int operator -(ModuloArithmetic item1, ModuloArithmetic item2)
         {
             if (item1.Divisor != item2.Divisor)
