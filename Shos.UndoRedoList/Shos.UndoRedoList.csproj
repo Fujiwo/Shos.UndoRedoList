@@ -3,6 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Shos.Collections</RootNamespace>
+    <Copyright>Copyright © 2020 Fujio Kojima</Copyright>
+    <RepositoryUrl>https://github.com/Fujiwo/Shos.UndoRedoList</RepositoryUrl>
+    <Authors>Fujio Kojima</Authors>
+    <Company>Sho's Software</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Fujiwo/Shos.UndoRedoList</PackageProjectUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
   </PropertyGroup>
 
 </Project>

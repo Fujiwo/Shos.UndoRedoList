@@ -1,9 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <Copyright>Copyright © 2020 Fujio Kojima</Copyright>
+
+    <RepositoryUrl>https://github.com/Fujiwo/Shos.UndoRedoList</RepositoryUrl>
+
+    <Authors>Fujio Kojima</Authors>
+
+    <Company>Sho's Software</Company>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <PackageProjectUrl>https://github.com/Fujiwo/Shos.UndoRedoList</PackageProjectUrl>
+
+    <NeutralLanguage>en</NeutralLanguage>
+
+    <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
