@@ -12,6 +12,10 @@ Types for undo/redo support.
 
 Tests for Shos.UndoRedoList.
 
+* Shos.UndoRedoList.SampleApp
+
+Sample WPF app for UndoRedoObservableCollection.
+
 ## Types
 
 ### class [UndoRedoList<TElement, TList>](Shos.UndoRedoList/UndoRedoList) : IList<TElement> where TList : IList<TElement>, new()
@@ -39,6 +43,8 @@ Specialized RingBuffer for undo/redo.
 > In mathematics, modular arithmetic is a system of arithmetic for integers, where numbers "wrap around" when reaching a certain value, called the modulus.
 
 ## Samples
+
+See [Shos.UndoRedoList.SampleApp](Shos.UndoRedoList.SampleApp).
 
 ## Author Info
 
