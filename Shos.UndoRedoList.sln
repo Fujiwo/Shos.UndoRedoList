@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shos.UndoRedoList", "Shos.UndoRedoList\Shos.UndoRedoList.csproj", "{62ECB1C7-5485-4543-B957-015A18798B23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shos.UndoRedoList.Tests", "Shos.UndoRedoList.Tests\Shos.UndoRedoList.Tests.csproj", "{3C0EBEC9-B889-4AF6-82BB-E8E3F1D77C2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62ECB1C7-5485-4543-B957-015A18798B23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62ECB1C7-5485-4543-B957-015A18798B23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62ECB1C7-5485-4543-B957-015A18798B23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62ECB1C7-5485-4543-B957-015A18798B23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C0EBEC9-B889-4AF6-82BB-E8E3F1D77C2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C0EBEC9-B889-4AF6-82BB-E8E3F1D77C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C0EBEC9-B889-4AF6-82BB-E8E3F1D77C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C0EBEC9-B889-4AF6-82BB-E8E3F1D77C2B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3BD2DEB2-10A2-4953-A0D5-990995330527}
+	EndGlobalSection
+EndGlobal
