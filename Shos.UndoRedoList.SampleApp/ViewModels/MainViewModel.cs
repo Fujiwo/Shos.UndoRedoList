@@ -27,6 +27,12 @@ namespace Shos.UndoRedoList.SampleApp.ViewModels
             Clear = new DelegateCommand(() => StaffList.Clear(), () => StaffList.Count > 0);
             Undo  = new DelegateCommand(() => StaffList.Undo (), () => StaffList.CanUndo);
             Redo  = new DelegateCommand(() => StaffList.Redo (), () => StaffList.CanRedo);
+
+            StaffList.CollectionChanged += (_, __) => {
+                Clear.RaiseCanExecuteChanged();
+                Undo .RaiseCanExecuteChanged();
+                Redo .RaiseCanExecuteChanged();
+            };
         }
     }
 }

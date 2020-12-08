@@ -29,8 +29,8 @@
                         <!--<TextBlock Text="{Binding Id}"/>-->
                         <!--<TextBox Text="{Binding Name}"/>-->
                         <!--<Button Content="Delete"/>-->
-                        <TextBlock Text="{Binding Id}"/>
-                        <TextBlock Text="{Binding Name}"/>
+                        <TextBox Text="{Binding Id}" IsReadOnly="True"/>
+                        <TextBox Text="{Binding Name}" IsReadOnly="True"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
