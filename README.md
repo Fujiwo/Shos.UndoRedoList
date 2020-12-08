@@ -190,7 +190,6 @@ Fujio Kojima: a software developer in Japan
 * [MVP Profile](https://mvp.microsoft.com/en-us/PublicProfile/21482)
 * [Blog (Japanese)](http://wp.shos.info)
 * [Web Site (Japanese)](http://www.shos.info)
-* [Web Site (Japanese)](http://www.shos.info)
 * [Twitter](https://twitter.com/Fujiwo)
 * [Instagram](https://www.instagram.com/fujiwo/)
 
