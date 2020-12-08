@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Shos.Collections;
 
 namespace Shos.UndoRedoList.SampleApp.Models
 {
-    using Shos.Collections;
-
-    class StaffList : UndoRedoObservableCollection<>
+    public class StaffList : UndoRedoObservableCollection<Staff>
     {
+        public new void Add(Staff staff)
+        {
+            staff.Id = Count + 1;
+            base.Add(staff);
+        }
     }
 }

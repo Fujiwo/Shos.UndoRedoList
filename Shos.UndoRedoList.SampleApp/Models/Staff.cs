@@ -1,4 +1,6 @@
-﻿namespace Shos.UndoRedoList.SampleApp.Models
+﻿using Prism.Mvvm;
+
+namespace Shos.UndoRedoList.SampleApp.Models
 {
     public class Staff : BindableBase
     {

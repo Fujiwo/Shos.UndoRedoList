@@ -4,7 +4,19 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <Authors>Fujio Kojima</Authors>
+    <Company>Sho's Software</Company>
+    <Copyright>Copyright © 2020 Fujio Kojima</Copyright>
+    <PackageProjectUrl>https://github.com/Fujiwo/Shos.UndoRedoList</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Fujiwo/Shos.UndoRedoList</RepositoryUrl>
+    <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shos.UndoRedoList\Shos.UndoRedoList.csproj" />

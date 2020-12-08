@@ -3,10 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Shos.UndoRedoList.SampleApp"
+        xmlns:viewModels="clr-namespace:Shos.UndoRedoList.SampleApp.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+    <Window.Resources>
+        <viewModels:MainViewModel x:Key="viewModel"/>
+    </Window.Resources>
+    <Grid DataContext="{Binding Source={StaticResource ResourceKey=viewModel}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label>Name</Label>
+            <TextBox Text="{Binding NewStaffName}" Width="100"/>
+            <Button Content="Add" Command="{Binding Add}"/>
+            <Button Content="Clear" Command="{Binding Clear}"/>
+            <Button Content="Undo" Command="{Binding Undo}"/>
+            <Button Content="Redo" Command="{Binding Redo}"/>
+        </StackPanel>
+        <ListBox Grid.Row="1" ItemsSource="{Binding StaffList}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <!--<TextBlock Text="{Binding Id}"/>-->
+                        <!--<TextBox Text="{Binding Name}"/>-->
+                        <!--<Button Content="Delete"/>-->
+                        <TextBlock Text="{Binding Id}"/>
+                        <TextBlock Text="{Binding Name}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>
