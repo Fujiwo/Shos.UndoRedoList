@@ -39,7 +39,7 @@ namespace Shos.Collections
             elements[BottomIndex.Value] = element;
         }
 
-        public void Clear() => BottomIndex = BottomIndex.InvalidItem;
+        public virtual void Clear() => BottomIndex = BottomIndex.InvalidItem;
 
         public void RemoveAfter(ModuloArithmetic index)
         {

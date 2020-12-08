@@ -16,6 +16,12 @@
             CurrentIndex = BottomIndex;
         }
 
+        public override void Clear()
+        {
+            base.Clear();
+            CurrentIndex = CurrentIndex.InvalidItem;
+        }
+
         public bool GoBackward()
         {
             if (!CanGoBackward)

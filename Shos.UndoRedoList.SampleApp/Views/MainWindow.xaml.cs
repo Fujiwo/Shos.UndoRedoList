@@ -12,7 +12,7 @@ namespace Shos.UndoRedoList.SampleApp.Views
         {
             InitializeComponent();
             DataContext = viewModel;
-            Closing += (_, __) => viewModel.Dispose();
+            //Closing += (_, __) => viewModel.Dispose();
         }
     }
 }
