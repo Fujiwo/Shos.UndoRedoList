@@ -2,20 +2,6 @@
 
 List and [ObservableCollection](https://docs.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1) which support undo/redo.
 
-## Projects
-
-* Shos.UndoRedoList
-
-Types for undo/redo support.
-
-* Shos.UndoRedoList.Tests
-
-Tests for Shos.UndoRedoList.
-
-* Shos.UndoRedoList.SampleApp
-
-Sample WPF app for UndoRedoObservableCollection.
-
 ## NuGet
 
 You can install Shos.UndoRedoList to your project with [NuGet](https://www.nuget.org) on Visual Studio.
@@ -33,6 +19,20 @@ You can install Shos.UndoRedoList to your project with [NuGet](https://www.nuget
 ### PackageReference
 
     <PackageReference Include="Shos.UndoRedoList" Version="1.0.1" />
+
+## Projects
+
+* Shos.UndoRedoList
+
+Types for undo/redo support.
+
+* Shos.UndoRedoList.Tests
+
+Tests for Shos.UndoRedoList.
+
+* Shos.UndoRedoList.SampleApp
+
+Sample WPF app for UndoRedoObservableCollection.
 
 ## Types
 
