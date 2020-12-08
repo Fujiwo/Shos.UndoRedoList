@@ -2,8 +2,17 @@
 
 namespace Shos.UndoRedoList.SampleApp.Views
 {
+    using ViewModels;
+
     public partial class MainWindow : Window
     {
-        public MainWindow() => InitializeComponent();
+        MainViewModel viewModel = new MainViewModel();
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            DataContext = viewModel;
+            Closing += (_, __) => viewModel.Dispose();
+        }
     }
 }

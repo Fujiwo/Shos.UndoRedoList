@@ -84,10 +84,23 @@ namespace Shos.Collections
                 list.BeginAction();
             }
 
-            public void Dispose()
+            public void Dispose() => list.EndAction();
+        }
+
+
+        public class DisabledUndoScope : IDisposable
+        {
+            readonly UndoRedoList<TElement, TList> list;
+            readonly bool                          listUndoEnabled;
+
+            public DisabledUndoScope(UndoRedoList<TElement, TList> list)
             {
-                list.EndAction();
+                this.list = list;
+                listUndoEnabled  = list.UndoEnabled;
+                list.UndoEnabled = false;
             }
+
+            public void Dispose() => list.UndoEnabled = listUndoEnabled;
         }
 
         public TList List { get; } = new TList();
@@ -95,6 +108,8 @@ namespace Shos.Collections
         public int Count => List.Count;
 
         public bool IsReadOnly => List.IsReadOnly;
+
+        public bool UndoEnabled { get; set; } = true;
 
         public TElement this[int index] {
             get => List[index];
@@ -136,6 +151,8 @@ namespace Shos.Collections
             }
             return false;
         }
+
+        public void ClearUndo() => undoBuffer.Clear();
 
         public void Add(TElement element)
         {
@@ -202,6 +219,9 @@ namespace Shos.Collections
 
         void Add(Action action)
         {
+            if (!UndoEnabled)
+                return;
+
             if (HasBeganAction)
                 actions.Add(action);
             else

@@ -6,10 +6,7 @@
         xmlns:viewModels="clr-namespace:Shos.UndoRedoList.SampleApp.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Window.Resources>
-        <viewModels:MainViewModel x:Key="viewModel"/>
-    </Window.Resources>
-    <Grid DataContext="{Binding Source={StaticResource ResourceKey=viewModel}}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="auto"/>
@@ -26,11 +23,9 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <!--<TextBlock Text="{Binding Id}"/>-->
-                        <!--<TextBox Text="{Binding Name}"/>-->
-                        <!--<Button Content="Delete"/>-->
                         <TextBox Text="{Binding Id}" IsReadOnly="True"/>
                         <TextBox Text="{Binding Name}" IsReadOnly="True"/>
+                        <Button Content="Delete" Command="{Binding DataContext.Remove, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" CommandParameter="{Binding}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

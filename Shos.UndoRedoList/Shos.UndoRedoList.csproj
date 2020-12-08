@@ -11,6 +11,8 @@
     <PackageProjectUrl>https://github.com/Fujiwo/Shos.UndoRedoList</PackageProjectUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
 </Project>
