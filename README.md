@@ -22,6 +22,18 @@ You can install Shos.UndoRedoList to your project with [NuGet](https://www.nuget
 
 * [NuGet Gallery | Shos.UndoRedoList](https://www.nuget.org/packages/Shos.UndoRedoList/)
 
+### Package Manager
+
+    PM>Install-Package Shos.UndoRedoList -version 1.0.1
+
+### .NET CLI
+
+    >dotnet add package Shos.UndoRedoList --version 1.0.1
+
+### PackageReference
+
+    <PackageReference Include="Shos.UndoRedoList" Version="1.0.1" />
+
 ## Types
 
 ### class [UndoRedoList<TElement, TList>](Shos.UndoRedoList/UndoRedoList) : IList<TElement> where TList : IList<TElement>, new()
@@ -50,9 +62,6 @@ Specialized RingBuffer for undo/redo.
 
 ## Samples
 
-###
-
-# Space
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Shos.Collections;
     using System.Collections.Generic;
