@@ -9,9 +9,13 @@ namespace Shos.Collections
     {
         abstract class Action
         {
-            public IList<TElement> Container { get; set; }
+            public IList<TElement> Container { get; set; } = null;
             public TElement Element { get; set; }
-            public int Index { get; set; }
+            public int Index { get; set; } = 0;
+
+            public Action()
+            { }
+            public Action(IList<TElement> container, TElement element, int index) => (Container, Element, Index) = (container, element, index);
 
             public abstract void Undo();
             public abstract void Redo();
@@ -19,22 +23,30 @@ namespace Shos.Collections
 
         class AddAction : Action
         {
-            public override void Undo() => Container.Remove(Element);
-            public override void Redo() => Container.Add(Element);
+            public AddAction(IList<TElement> container, TElement element, int index) : base(container, element, index)
+            {}
+
+            public override void Undo() => Container.RemoveAt(Index);
+            public override void Redo() => Container.Insert(Index, Element);
         }
 
         class RemoveAction : Action
         {
-            public override void Undo() => Container.Add(Element);
-            public override void Redo() => Container.Remove(Element);
+            public RemoveAction(IList<TElement> container, TElement element, int index) : base(container, element, index)
+            {}
+
+            public override void Undo() => Container.Insert(Index, Element);
+            public override void Redo() => Container.RemoveAt(Index);
         }
 
         class ExchangeAction : Action
         {
+            public ExchangeAction(IList<TElement> container, TElement oldElement, TElement newElement, int index) : base(container, newElement, index) => OldElement = oldElement;
+
             public TElement OldElement { get; set; }
 
-            public override void Undo() => Container[Container.IndexOf(Element)] = OldElement;
-            public override void Redo() => Container[Container.IndexOf(OldElement)] = Element;
+            public override void Undo() => Container[Index] = OldElement;
+            public override void Redo() => Container[Index] = Element;
         }
 
         class ActionCollection : Action, IEnumerable<Action>
@@ -87,7 +99,7 @@ namespace Shos.Collections
         public TElement this[int index] {
             get => List[index];
             set {
-                Add(new ExchangeAction { Container = List, OldElement = List[index], Element = value });
+                Add(new ExchangeAction(container: List, oldElement: List[index], newElement: value, index: index));
                 List[index] = value;
             }
         }
@@ -127,7 +139,7 @@ namespace Shos.Collections
 
         public void Add(TElement element)
         {
-            Add(new AddAction { Container = List, Element = element });
+            Add(new AddAction(container: List, element: element, index: List.Count));
             List.Add(element);
         }
 
@@ -135,7 +147,7 @@ namespace Shos.Collections
         {
             var actionCollection = new ActionCollection { Container = List };
             for (var index = List.Count - 1; index >= 0; index--)
-                actionCollection.Add(new RemoveAction { Container = List, Element = List[index] });
+                actionCollection.Add(new RemoveAction(container: List, element: List[index], index: index));
             Add(actionCollection);
             List.Clear();
         }
@@ -150,17 +162,24 @@ namespace Shos.Collections
 
         public void Insert(int index, TElement element)
         {
-            Add(new AddAction { Container = List, Element = element });
+            Add(new AddAction(container: List, element: element, index: index));
             List.Insert(index, element);
         }
 
         public bool Remove(TElement element)
         {
-            Add(new RemoveAction { Container = List, Element = element });
-            return List.Remove(element);
+            var index = List.IndexOf(element);
+            if (index < 0)
+                return false;
+            RemoveAt(index);
+            return true;
         }
 
-        public void RemoveAt(int index) => Remove(List[index]);
+        public void RemoveAt(int index)
+        {
+            Add(new RemoveAction(container: List, element: List[index], index: index));
+            List.RemoveAt(index);
+        }
 
         public void BeginAction()
         {

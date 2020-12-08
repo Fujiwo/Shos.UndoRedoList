@@ -344,8 +344,8 @@ namespace Shos.UndoRedoList.Tests
             Assert.IsTrue(list.Undo());
             Assert.IsTrue(list.CanUndo);
             Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(300, list[1]); // 
-            Assert.AreEqual(400, list[0]); // 
+            Assert.AreEqual(300, list[0]);
+            Assert.AreEqual(400, list[1]); 
 
             list.Add(500);
             list[list.Count - 1] = 600;
@@ -361,8 +361,8 @@ namespace Shos.UndoRedoList.Tests
             Assert.IsTrue(list.CanUndo);
             Assert.IsTrue(list.Undo());
             Assert.AreEqual(3, list.Count);
-            Assert.AreEqual(400, list[0]);
-            Assert.AreEqual(300, list[1]);
+            Assert.AreEqual(300, list[0]);
+            Assert.AreEqual(400, list[1]);
             Assert.AreEqual(500, list[2]);
         }
 
@@ -442,8 +442,8 @@ namespace Shos.UndoRedoList.Tests
             Assert.IsTrue(list.CanUndo);
             Assert.IsTrue(list.CanRedo);
             Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(200, list[0]); // 
-            Assert.AreEqual(100, list[1]); // 
+            Assert.AreEqual(100, list[0]);
+            Assert.AreEqual(200, list[1]);
 
             Assert.IsTrue(list.Redo());
             Assert.IsTrue(list.CanUndo);
