@@ -34,6 +34,8 @@ Tests for Shos.UndoRedoList.
 
 Sample WPF app for UndoRedoObservableCollection.
 
+![Shos.UndoRedoList.SampleApp](https://github.com/Fujiwo/Shos.UndoRedoList/blob/master/Images/Shos.UndoRedoList.SampleApp.png?raw=true "Shos.UndoRedoList.SampleApp")
+
 ## Types
 
 ### class [UndoRedoList<TElement, TList>](Shos.UndoRedoList/UndoRedoList) : IList<TElement> where TList : IList<TElement>, new()
