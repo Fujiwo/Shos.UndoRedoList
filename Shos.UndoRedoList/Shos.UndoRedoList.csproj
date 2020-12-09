@@ -19,4 +19,8 @@
     <Description>Types for collection which supports undo/redo.</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Documents\ClassDiagrams\" />
+  </ItemGroup>
+
 </Project>

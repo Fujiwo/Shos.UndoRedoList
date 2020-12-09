@@ -1,0 +1,11 @@
+@startuml
+class "UndoRedoObservableCollection`1"<TElement> {
+    +  <<event>> CollectionChanged : NotifyCollectionChangedEventHandler 
+    + UndoRedoObservableCollection(maximumUndoTimes:int)
+    + UndoRedoObservableCollection()
+}
+class "UndoRedoList`2"<T1,T2> {
+}
+"UndoRedoList`2" "<TElement,ObservableCollection<TElement>>" <|-- "UndoRedoObservableCollection`1"
+INotifyCollectionChanged <|-- "UndoRedoObservableCollection`1"
+@enduml

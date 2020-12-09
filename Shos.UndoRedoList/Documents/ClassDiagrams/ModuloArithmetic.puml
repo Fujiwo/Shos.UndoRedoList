@@ -1,0 +1,20 @@
+@startuml
+class ModuloArithmetic <<struct>> <<global>> {
+    + <<const>> DefaultDivisor : int = 100
+    value : int
+    + Value : int <<get>> <<set>>
+    + Divisor : int <<get>>
+    + IsValid : bool <<get>>
+    PreviousValue : int <<get>>
+    NextValue : int <<get>>
+    + ModuloArithmetic(divisor:int, isValid:bool)
+    + Equals(item:ModuloArithmetic) : bool
+    + <<override>> Equals(item:object) : bool
+    + <<override>> GetHashCode() : int
+    + MovePrevious() : void
+    + MoveNext() : void
+}
+class "IEquatable`1"<T> {
+}
+"IEquatable`1" "<ModuloArithmetic>" <|-- ModuloArithmetic
+@enduml

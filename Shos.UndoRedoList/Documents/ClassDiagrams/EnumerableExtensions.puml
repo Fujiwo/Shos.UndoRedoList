@@ -1,0 +1,6 @@
+@startuml
+class EnumerableExtensions <<static>> {
+    + {static} ForEach(@this:IEnumerable<TElement>, action:Action<TElement>) : void
+    + {static} ReverseForEach(@this:IEnumerable<TElement>, action:Action<TElement>) : void
+}
+@enduml

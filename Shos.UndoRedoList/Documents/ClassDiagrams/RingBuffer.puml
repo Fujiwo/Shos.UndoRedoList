@@ -1,0 +1,18 @@
+@startuml
+class "RingBuffer`1"<TElement> {
+    + Count : int <<get>>
+    + TopIndex : ModuloArithmetic <<get>>
+    + BottomIndex : ModuloArithmetic <<get>>
+    HasData : bool <<get>>
+    + RingBuffer(size:int)
+    + <<virtual>> Add(element:TElement) : void
+    + <<virtual>> Clear() : void
+    + RemoveAfter(index:ModuloArithmetic) : void
+    + Remove() : bool
+    + GetEnumerator() : IEnumerator<TElement>
+    GetEnumerator() : IEnumerator
+}
+class "IEnumerable`1"<T> {
+}
+"IEnumerable`1" "<TElement>" <|-- "RingBuffer`1"
+@enduml

@@ -1,0 +1,99 @@
+@startuml
+class "UndoRedoList`2"<TElement,TList> {
+    hasBeganStoringAction : bool = false
+    + CanUndo : bool <<get>>
+    + CanRedo : bool <<get>>
+    + UndoEnabled : bool <<get>> <<set>> = true
+    + UndoRedoList(maximumUndoTimes:int)
+    + Undo() : bool
+    + Redo() : bool
+    + ClearUndo() : void
+    + BeginActions() : void
+    + EndActions() : void
+    + List : TList <<get>>
+    + Count : int <<get>>
+    + IsReadOnly : bool <<get>>
+    + Add(element:TElement) : void
+    + Clear() : void
+    + Contains(element:TElement) : bool
+    + CopyTo(array:TElement[], arrayIndex:int) : void
+    + IndexOf(element:TElement) : int
+    + Insert(index:int, element:TElement) : void
+    + Remove(element:TElement) : bool
+    + RemoveAt(index:int) : void
+    + GetEnumerator() : IEnumerator<TElement>
+    GetEnumerator() : IEnumerator
+    Add(action:Action) : void
+}
+class "IList`1"<T> {
+}
+abstract class Action {
+    + Index : int <<get>> <<set>> = 0
+    + Action()
+    + Action(container:IList<TElement>, element:TElement, index:int)
+    + {abstract} Undo() : void
+    + {abstract} Redo() : void
+}
+class AddAction {
+    + AddAction(container:IList<TElement>, element:TElement, index:int)
+    + <<override>> Undo() : void
+    + <<override>> Redo() : void
+}
+class RemoveAction {
+    + RemoveAction(container:IList<TElement>, element:TElement, index:int)
+    + <<override>> Undo() : void
+    + <<override>> Redo() : void
+}
+class ExchangeAction {
+    + ExchangeAction(container:IList<TElement>, oldElement:TElement, newElement:TElement, index:int)
+    + <<override>> Undo() : void
+    + <<override>> Redo() : void
+}
+class ActionCollection {
+    + ActionCollection()
+    + ActionCollection(actions:IEnumerable<Action>)
+    + Add(action:Action) : void
+    + <<override>> Undo() : void
+    + <<override>> Redo() : void
+    + GetEnumerator() : IEnumerator<Action>
+    GetEnumerator() : IEnumerator
+}
+class ActionScope {
+    + ActionScope(list:UndoRedoList<TElement, TList>)
+    + Dispose() : void
+}
+class DisabledUndoScope {
+    <<readonly>> listUndoEnabled : bool
+    + DisabledUndoScope(list:UndoRedoList<TElement, TList>)
+    + Dispose() : void
+}
+class "UndoRedoRingBuffer`1"<T> {
+}
+class "List`1"<T> {
+}
+class "IEnumerable`1"<T> {
+}
+"IList`1" "<TElement>" <|-- "UndoRedoList`2"
+"UndoRedoList`2" --> "undoBuffer<Action>" "UndoRedoRingBuffer`1"
+"UndoRedoList`2" o-> "storedActions<Action>" "List`1"
+"UndoRedoList`2" +-- Action
+Action o-> "Container<TElement>" "IList`1"
+Action --> "Element" TElement
+"UndoRedoList`2" +-- AddAction
+Action <|-- AddAction
+"UndoRedoList`2" +-- RemoveAction
+Action <|-- RemoveAction
+"UndoRedoList`2" +-- ExchangeAction
+Action <|-- ExchangeAction
+ExchangeAction --> "OldElement" TElement
+"UndoRedoList`2" +-- ActionCollection
+Action <|-- ActionCollection
+"IEnumerable`1" "<Action>" <|-- ActionCollection
+ActionCollection --> "actions<Action>" "List`1"
+"UndoRedoList`2" +-- ActionScope
+IDisposable <|-- ActionScope
+ActionScope --> "list<TElement,TList>" "UndoRedoList`2"
+"UndoRedoList`2" +-- DisabledUndoScope
+IDisposable <|-- DisabledUndoScope
+DisabledUndoScope --> "list<TElement,TList>" "UndoRedoList`2"
+@enduml

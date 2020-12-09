@@ -1,0 +1,16 @@
+@startuml
+class "UndoRedoRingBuffer`1"<TElement> {
+    + Current : TElement <<get>>
+    + CurrentIndex : ModuloArithmetic <<get>>
+    + CanGoBackward : bool <<get>>
+    + CanGoForward : bool <<get>>
+    + UndoRedoRingBuffer(size:int)
+    + <<override>> Add(element:TElement) : void
+    + <<override>> Clear() : void
+    + GoBackward() : bool
+    + GoForward() : bool
+}
+class "RingBuffer`1"<T> {
+}
+"RingBuffer`1" "<TElement>" <|-- "UndoRedoRingBuffer`1"
+@enduml
