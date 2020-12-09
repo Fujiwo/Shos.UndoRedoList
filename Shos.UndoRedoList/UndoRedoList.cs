@@ -196,8 +196,6 @@ namespace Shos.Collections
 
         public void CopyTo(TElement[] array, int arrayIndex) => List.CopyTo(array, arrayIndex);
 
-        public IEnumerator<TElement> GetEnumerator() => List.GetEnumerator();
-
         public int IndexOf(TElement element) => List.IndexOf(element);
 
         public void Insert(int index, TElement element)
@@ -220,6 +218,8 @@ namespace Shos.Collections
             Add(new RemoveAction(container: List, element: List[index], index: index));
             List.RemoveAt(index);
         }
+
+        public IEnumerator<TElement> GetEnumerator() => List.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         #endregion
