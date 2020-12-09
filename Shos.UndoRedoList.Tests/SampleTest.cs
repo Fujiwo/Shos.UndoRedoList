@@ -64,7 +64,7 @@ namespace Shos.UndoRedoList.Tests
 
             // Undo
             Assert.IsTrue(list.Undo());
-            // 3 adding actions can undo in one time.
+            // The 3 actions in ActionScope can undo in one time.
             Assert.AreEqual(0, list.Count);
             Assert.IsFalse(list.CanUndo);
         }

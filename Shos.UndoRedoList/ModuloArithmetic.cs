@@ -2,8 +2,8 @@
 
 namespace Shos.Collections
 {
-    // Modular arithmetic - Wikipedia
-    // https://en.wikipedia.org/wiki/Modular_arithmetic
+    ///<summary>Modular arithmetic.</summary>
+    ///<seealso cref="https://en.wikipedia.org/wiki/Modular_arithmetic">Modular arithmetic - Wikipedia</seealso>
     public struct ModuloArithmetic : IEquatable<ModuloArithmetic>
     {
         public const int DefaultDivisor = 100;
@@ -37,7 +37,9 @@ namespace Shos.Collections
             value   = isValid ? 0 : -1;
         }
 
+        #region IEquatable<T> implementation
         public bool Equals(ModuloArithmetic item) => this.Equals(item);
+        #endregion
         public override bool Equals(object item) => Value.Equals(((ModuloArithmetic)item).Value);
         public override int GetHashCode() => Value.GetHashCode();
 

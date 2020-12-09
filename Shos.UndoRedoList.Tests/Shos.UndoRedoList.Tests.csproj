@@ -20,6 +20,8 @@
     <NeutralLanguage>en</NeutralLanguage>
 
     <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
+
+    <Description>Tests for Shos.UndoRedoList.</Description>
   </PropertyGroup>
 
   <ItemGroup>

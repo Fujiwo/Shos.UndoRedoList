@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Shos.Collections
 {
-    // Circular buffer (circular queue, cyclic buffer or ring buffer) - Wikipedia
-    // https://en.wikipedia.org/wiki/Circular_buffer
+    ///<summary>Ring buffer.</summary>
+    ///<seealso cref="https://en.wikipedia.org/wiki/Circular_buffer">Circular buffer (circular queue, cyclic buffer or ring buffer) - Wikipedia</seealso>
     public class RingBuffer<TElement> : IEnumerable<TElement>
     {
         protected const int defaultSize = ModuloArithmetic.DefaultDivisor;
@@ -43,6 +43,7 @@ namespace Shos.Collections
 
         public virtual void Clear() => BottomIndex = BottomIndex.InvalidItem;
 
+        /// <summary>Remove all elements at the index and after the index.</summary>
         public void RemoveAfter(ModuloArithmetic index)
         {
             if (!HasData)
@@ -65,6 +66,7 @@ namespace Shos.Collections
             return true;
         }
 
+        #region IEnumerable<T> implementation
         public IEnumerator<TElement> GetEnumerator()
         {
             if (HasData) {
@@ -78,5 +80,6 @@ namespace Shos.Collections
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        #endregion
     }
 }

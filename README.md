@@ -10,21 +10,21 @@ You can install Shos.UndoRedoList to your project with [NuGet](https://www.nuget
 
 ### Package Manager
 
-    PM>Install-Package Shos.UndoRedoList -version 1.0.1
+    PM>Install-Package Shos.UndoRedoList -version 1.0.2
 
 ### .NET CLI
 
-    >dotnet add package Shos.UndoRedoList --version 1.0.1
+    >dotnet add package Shos.UndoRedoList --version 1.0.2
 
 ### PackageReference
 
-    <PackageReference Include="Shos.UndoRedoList" Version="1.0.1" />
+    <PackageReference Include="Shos.UndoRedoList" Version="1.0.2" />
 
 ## Projects
 
 * Shos.UndoRedoList
 
-Types for undo/redo support.
+Types for collection which supports undo/redo.
 
 * Shos.UndoRedoList.Tests
 
@@ -38,7 +38,7 @@ Sample WPF app for UndoRedoObservableCollection.
 
 ### class [UndoRedoList<TElement, TList>](Shos.UndoRedoList/UndoRedoList) : IList<TElement> where TList : IList<TElement>, new()
 
-List which supports undo/redo.
+[IList](https://docs.microsoft.com/dotnet/api/system.collections.ilist) implemented collection which supports undo/redo.
 
 ### class [UndoRedoObservableCollection<TElement>](Shos.UndoRedoList/UndoRedoObservableCollection) : UndoRedoList<TElement, ObservableCollection<TElement>>, INotifyCollectionChanged
 
@@ -59,6 +59,10 @@ Specialized RingBuffer for undo/redo.
 [Modular arithmetic - Wikipedia](https://en.wikipedia.org/wiki/Modular_arithmetic)
 
 > In mathematics, modular arithmetic is a system of arithmetic for integers, where numbers "wrap around" when reaching a certain value, called the modulus.
+
+### static class [EnumerableExtensions](Shos.UndoRedoList/EnumerableExtensions.cs)
+
+Extension methods for IEnumerable.
 
 ## Samples
 
@@ -128,7 +132,7 @@ Specialized RingBuffer for undo/redo.
 
                 // Undo
                 Assert.IsTrue(list.Undo());
-                // 3 adding actions can undo in one time.
+                // The 3 actions in ActionScope can undo in one time.
                 Assert.AreEqual(0, list.Count);
                 Assert.IsFalse(list.CanUndo);
             }

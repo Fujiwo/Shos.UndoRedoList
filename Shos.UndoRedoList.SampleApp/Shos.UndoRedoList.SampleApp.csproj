@@ -12,6 +12,7 @@
     <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>Sample WPF app for UndoRedoObservableCollection.</Description>
   </PropertyGroup>
 
   <ItemGroup>

@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace Shos.Collections
 {
+    /// <summary>IList implemented collection which supports undo/redo.</summary>
+    /// <typeparam name="TElement">type of elements</typeparam>
+    /// <typeparam name="TList">type of IList implemented collection</typeparam>
     public class UndoRedoList<TElement, TList> : IList<TElement> where TList : IList<TElement>, new()
     {
         abstract class Action
@@ -58,22 +61,14 @@ namespace Shos.Collections
 
             public void Add(Action action) => actions.Add(action);
 
-            public override void Undo()
-            {
-                for (var index = actions.Count - 1; index >= 0; index--)
-                    actions[index].Undo();
-            }
-
-            public override void Redo()
-            {
-                foreach (var action in actions)
-                    action.Redo();
-            }
+            public override void Undo() => actions.ReverseForEach(action => action.Undo());
+            public override void Redo() => actions.ForEach       (action => action.Redo());
 
             public IEnumerator<Action> GetEnumerator() => actions.GetEnumerator();
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
+        /// <summary>Actions in ActionScope can undo in one time.</summary>
         public class ActionScope : IDisposable
         {
             readonly UndoRedoList<TElement, TList> list;
@@ -81,13 +76,13 @@ namespace Shos.Collections
             public ActionScope(UndoRedoList<TElement, TList> list)
             {
                 this.list = list;
-                list.BeginAction();
+                list.BeginActions();
             }
 
-            public void Dispose() => list.EndAction();
+            public void Dispose() => list.EndActions();
         }
 
-
+        /// <summary>You can't undo actions in DisabledUndoScope.</summary>
         public class DisabledUndoScope : IDisposable
         {
             readonly UndoRedoList<TElement, TList> list;
@@ -103,32 +98,17 @@ namespace Shos.Collections
             public void Dispose() => list.UndoEnabled = listUndoEnabled;
         }
 
-        public TList List { get; } = new TList();
-
-        public int Count => List.Count;
-
-        public bool IsReadOnly => List.IsReadOnly;
-
-        public bool UndoEnabled { get; set; } = true;
-
-        public TElement this[int index] {
-            get => List[index];
-            set {
-                Add(new ExchangeAction(container: List, oldElement: List[index], newElement: value, index: index));
-                List[index] = value;
-            }
-        }
-
         readonly UndoRedoRingBuffer<Action> undoBuffer;
+        List<Action>                        storedActions         = new List<Action>();
+        bool                                hasBeganStoringAction = false;
 
-        List<Action> actions = new List<Action>();
-        bool HasBeganAction { get; set; } = false;
+        public bool CanUndo => undoBuffer.CanGoBackward;
+        public bool CanRedo => undoBuffer.CanGoForward ;
+        /// <summary>You can't undo actions while UndoEnabled is false.</summary>
+        public bool UndoEnabled { get; set; } = true;
 
         public UndoRedoList(int maximumUndoTimes = ModuloArithmetic.DefaultDivisor)
             => undoBuffer = new UndoRedoRingBuffer<Action>(maximumUndoTimes);
-
-        public bool CanUndo => undoBuffer.CanGoBackward;
-        public bool CanRedo => undoBuffer.CanGoForward;
 
         public bool Undo()
         {
@@ -153,6 +133,49 @@ namespace Shos.Collections
         }
 
         public void ClearUndo() => undoBuffer.Clear();
+
+        /// <summary>
+        /// Method for ActionScope.
+        /// You can undo actions between BeginActions() and EndActions() in one time.
+        /// </summary>
+        public void BeginActions()
+        {
+            if (hasBeganStoringAction || storedActions.Count != 0)
+                throw new InvalidOperationException();
+            hasBeganStoringAction = true;
+        }
+
+        /// <summary>
+        /// Method for ActionScope.
+        /// You can undo actions between BeginActions() and EndActions() in one time.
+        /// </summary>
+        public void EndActions()
+        {
+            if (!hasBeganStoringAction)
+                throw new InvalidOperationException();
+            if (storedActions.Count == 1)
+                undoBuffer.Add(storedActions[0]);
+            else if (storedActions.Count > 1)
+                undoBuffer.Add(new ActionCollection(storedActions));
+            storedActions.Clear();
+            hasBeganStoringAction = false;
+        }
+
+        /// <summary>Inner IList implemented collection.</summary>
+        public TList List { get; } = new TList();
+
+        #region IList<T> implementation
+        public int Count => List.Count;
+
+        public bool IsReadOnly => List.IsReadOnly;
+
+        public TElement this[int index] {
+            get => List[index];
+            set {
+                Add(new ExchangeAction(container: List, oldElement: List[index], newElement: value, index: index));
+                List[index] = value;
+            }
+        }
 
         public void Add(TElement element)
         {
@@ -198,36 +221,18 @@ namespace Shos.Collections
             List.RemoveAt(index);
         }
 
-        public void BeginAction()
-        {
-            if (HasBeganAction || actions.Count != 0)
-                throw new InvalidOperationException();
-            HasBeganAction = true;
-        }
-
-        public void EndAction()
-        {
-            if (!HasBeganAction)
-                throw new InvalidOperationException();
-            if (actions.Count == 1)
-                undoBuffer.Add(actions[0]);
-            else if (actions.Count > 1)
-                undoBuffer.Add(new ActionCollection(actions));
-            actions.Clear();
-            HasBeganAction = false;
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        #endregion
 
         void Add(Action action)
         {
             if (!UndoEnabled)
                 return;
 
-            if (HasBeganAction)
-                actions.Add(action);
+            if (hasBeganStoringAction)
+                storedActions.Add(action);
             else
                 undoBuffer.Add(action);
         }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
