@@ -22,15 +22,15 @@ You can install Shos.UndoRedoList to your project with [NuGet](https://www.nuget
 
 ## Projects
 
-* Shos.UndoRedoList
+* [Shos.UndoRedoList](Shos.UndoRedoList)
 
 Types for collection which supports undo/redo.
 
-* Shos.UndoRedoList.Tests
+* [Shos.UndoRedoList.Tests](Shos.UndoRedoList.Tests)
 
 Tests for Shos.UndoRedoList.
 
-* Shos.UndoRedoList.SampleApp
+* [Shos.UndoRedoList.SampleApp](Shos.UndoRedoList.SampleApp)
 
 Sample WPF app for UndoRedoObservableCollection.
 
@@ -38,11 +38,11 @@ Sample WPF app for UndoRedoObservableCollection.
 
 ## Types
 
-### class [UndoRedoList<TElement, TList>](Shos.UndoRedoList/UndoRedoList) : IList<TElement> where TList : IList<TElement>, new()
+### class [UndoRedoList<TElement, TList>](Shos.UndoRedoList/UndoRedoList.cs) : IList<TElement> where TList : IList<TElement>, new()
 
 [IList](https://docs.microsoft.com/dotnet/api/system.collections.ilist) implemented collection which supports undo/redo.
 
-### class [UndoRedoObservableCollection<TElement>](Shos.UndoRedoList/UndoRedoObservableCollection) : UndoRedoList<TElement, ObservableCollection<TElement>>, INotifyCollectionChanged
+### class [UndoRedoObservableCollection<TElement>](Shos.UndoRedoList/UndoRedoObservableCollection.cs) : UndoRedoList<TElement, ObservableCollection<TElement>>, INotifyCollectionChanged
 
 [ObservableCollection](https://docs.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1) which supports undo/redo.
 
@@ -52,7 +52,7 @@ Sample WPF app for UndoRedoObservableCollection.
 
 > In computer science, a circular buffer, circular queue, cyclic buffer or ring buffer is a data structure that uses a single, fixed-size buffer as if it were connected end-to-end. This structure lends itself easily to buffering data streams.
 
-### class [UndoRedoRingBuffer<TElement>](Shos.UndoRedoList/UndoRedoRingBuffer) : RingBuffer<TElement>
+### class [UndoRedoRingBuffer<TElement>](Shos.UndoRedoList/UndoRedoRingBuffer.cs) : RingBuffer<TElement>
 
 Specialized RingBuffer for undo/redo.
 
