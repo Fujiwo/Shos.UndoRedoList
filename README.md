@@ -197,6 +197,10 @@ The following image is a class diagram made from these *.puml files.
 
 See also: [Shos.UndoRedoList.SampleApp](Shos.UndoRedoList.SampleApp)
 
+## Related Articles
+
+* [[C#][.NET] Shos.UndoRedoList (List and ObservableCollection which support undo/redo) | Programming C# | Sho's Software](https://wp.shos.info/2020/12/09/c-net-shos-undoredolist-list-and-observablecollection-which-support-undo-redo/)
+
 ## Author Info
 
 Fujio Kojima: a software developer in Japan
