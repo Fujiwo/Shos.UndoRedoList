@@ -2,6 +2,8 @@
 
 namespace Shos.Collections
 {
+    // Modular arithmetic - Wikipedia
+    // https://en.wikipedia.org/wiki/Modular_arithmetic
     public struct ModuloArithmetic : IEquatable<ModuloArithmetic>
     {
         public const int DefaultDivisor = 100;

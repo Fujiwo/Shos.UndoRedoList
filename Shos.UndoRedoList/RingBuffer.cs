@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace Shos.Collections
 {
+    // Circular buffer (circular queue, cyclic buffer or ring buffer) - Wikipedia
+    // https://en.wikipedia.org/wiki/Circular_buffer
     public class RingBuffer<TElement> : IEnumerable<TElement>
     {
         protected const int defaultSize = ModuloArithmetic.DefaultDivisor;

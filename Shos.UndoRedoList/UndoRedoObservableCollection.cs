@@ -7,6 +7,9 @@ namespace Shos.Collections
     {
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
+        public UndoRedoObservableCollection(int maximumUndoTimes = ModuloArithmetic.DefaultDivisor) : base(maximumUndoTimes)
+        {}
+
         public UndoRedoObservableCollection() => List.CollectionChanged += (_, e) => CollectionChanged?.Invoke(this, e);
     }
 }

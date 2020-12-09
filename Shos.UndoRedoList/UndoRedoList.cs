@@ -124,8 +124,8 @@ namespace Shos.Collections
         List<Action> actions = new List<Action>();
         bool HasBeganAction { get; set; } = false;
 
-        public UndoRedoList(int bufferSize = ModuloArithmetic.DefaultDivisor)
-            => undoBuffer = new UndoRedoRingBuffer<Action>(bufferSize);
+        public UndoRedoList(int maximumUndoTimes = ModuloArithmetic.DefaultDivisor)
+            => undoBuffer = new UndoRedoRingBuffer<Action>(maximumUndoTimes);
 
         public bool CanUndo => undoBuffer.CanGoBackward;
         public bool CanRedo => undoBuffer.CanGoForward;
