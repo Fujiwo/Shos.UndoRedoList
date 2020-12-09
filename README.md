@@ -34,6 +34,8 @@ Tests for Shos.UndoRedoList.
 
 Sample WPF app for UndoRedoObservableCollection.
 
+![Shos.UndoRedoList.SampleApp](https://github.com/Fujiwo/Shos.UndoRedoList/blob/master/Images/Shos.UndoRedoList.SampleApp.png?raw=true "Shos.UndoRedoList.SampleApp")
+
 ## Types
 
 ### class [UndoRedoList<TElement, TList>](Shos.UndoRedoList/UndoRedoList) : IList<TElement> where TList : IList<TElement>, new()
@@ -191,7 +193,6 @@ Fujio Kojima: a software developer in Japan
 * Microsoft MVP for Developer Technologies (Nov. 2018 - Jun. 2021)
 * [MVP Profile](https://mvp.microsoft.com/en-us/PublicProfile/21482)
 * [Blog (Japanese)](http://wp.shos.info)
-* [Web Site (Japanese)](http://www.shos.info)
 * [Web Site (Japanese)](http://www.shos.info)
 * [Twitter](https://twitter.com/Fujiwo)
 * [Instagram](https://www.instagram.com/fujiwo/)
