@@ -68,7 +68,7 @@ Extension methods for IEnumerable.
 
 ### Class diagram
 
-*.puml files in [Documents/ClassDiagrams](Documents/ClassDiagrams) are class diagram for [PlantUML](https://plantuml.com).
+*.puml files in [Shos.UndoRedoList/Documents/ClassDiagrams](Shos.UndoRedoList/Documents/ClassDiagrams) are class diagram for [PlantUML](https://plantuml.com).
 
 The following image is a class diagram made from these *.puml files.
 
