@@ -29,6 +29,7 @@ class "IList`1"<T> {
 }
 abstract class Action {
     + Index : int <<get>> <<set>> = 0
+    + Element: TElement
     + Action()
     + Action(container:IList<TElement>, element:TElement, index:int)
     + {abstract} Undo() : void
@@ -45,6 +46,7 @@ class RemoveAction {
     + <<override>> Redo() : void
 }
 class ExchangeAction {
+    + OldElement: TElement
     + ExchangeAction(container:IList<TElement>, oldElement:TElement, newElement:TElement, index:int)
     + <<override>> Undo() : void
     + <<override>> Redo() : void
@@ -78,14 +80,12 @@ class "IEnumerable`1"<T> {
 "UndoRedoList`2" o-> "storedActions<Action>" "List`1"
 "UndoRedoList`2" +-- Action
 Action o-> "Container<TElement>" "IList`1"
-Action --> "Element" TElement
 "UndoRedoList`2" +-- AddAction
 Action <|-- AddAction
 "UndoRedoList`2" +-- RemoveAction
 Action <|-- RemoveAction
 "UndoRedoList`2" +-- ExchangeAction
 Action <|-- ExchangeAction
-ExchangeAction --> "OldElement" TElement
 "UndoRedoList`2" +-- ActionCollection
 Action <|-- ActionCollection
 "IEnumerable`1" "<Action>" <|-- ActionCollection
