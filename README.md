@@ -30,6 +30,10 @@ Types for collection which supports undo/redo.
 
 Tests for Shos.UndoRedoList.
 
+* [Shos.UndoRedoList.PerformanceTests](Shos.UndoRedoList.PerformanceTests)
+
+Performance tests for Shos.UndoRedoList.
+
 * [Shos.UndoRedoList.SampleApp](Shos.UndoRedoList.SampleApp)
 
 Sample WPF app for UndoRedoObservableCollection.
