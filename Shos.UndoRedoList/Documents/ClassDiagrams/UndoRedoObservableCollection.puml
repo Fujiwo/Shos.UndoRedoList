@@ -2,7 +2,6 @@
 class "UndoRedoObservableCollection`1"<TElement> {
     +  <<event>> CollectionChanged : NotifyCollectionChangedEventHandler 
     + UndoRedoObservableCollection(maximumUndoTimes:int)
-    + UndoRedoObservableCollection()
 }
 class "UndoRedoList`2"<T1,T2> {
 }

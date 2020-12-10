@@ -46,6 +46,11 @@ Sample WPF app for UndoRedoObservableCollection.
 
 [IList](https://docs.microsoft.com/dotnet/api/system.collections.ilist) implemented collection which supports undo/redo.
 
+
+### class [UndoRedoList<TElement>](Shos.UndoRedoList/UndoRedoList.cs) : IList<TElement> where TList : IList<TElement>, new()
+
+[List](https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1) implemented collection which supports undo/redo.
+
 ### class [UndoRedoObservableCollection<TElement>](Shos.UndoRedoList/UndoRedoObservableCollection.cs) : UndoRedoList<TElement, ObservableCollection<TElement>>, INotifyCollectionChanged
 
 [ObservableCollection](https://docs.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1) which supports undo/redo.

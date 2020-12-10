@@ -96,4 +96,12 @@ ActionScope --> "list<TElement,TList>" "UndoRedoList`2"
 "UndoRedoList`2" +-- DisabledUndoScope
 IDisposable <|-- DisabledUndoScope
 DisabledUndoScope --> "list<TElement,TList>" "UndoRedoList`2"
+
+class "UndoRedoList"<TElement> {
+    + UndoRedoList(maximumUndoTimes:int)
+}
+class "UndoRedoList`2"<T1,T2> {
+}
+"UndoRedoList`2" "<TElement,ObservableCollection<TElement>>" <|-- "UndoRedoList"
+
 @enduml
