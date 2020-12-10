@@ -12,80 +12,96 @@ namespace Shos.UndoRedoList.Tests
         public void UndoRedoTest()
         {
             // list which support undo/redo.
-            var list = new UndoRedoList<int, List<int>>();
+            var target = new UndoRedoList<int, List<int>>();
 
-            Assert.IsFalse(list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
+            Assert.IsFalse(target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
 
-            // Modify list
-            list.Add(100);
-            Assert.AreEqual(1, list.Count);
-            Assert.AreEqual(100, list[0]);
-            Assert.IsTrue (list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
+            // Modify target
+            target.Add(100);
+            Assert.AreEqual(1, target.Count);
+            Assert.AreEqual(100, target[0]);
+            Assert.IsTrue (target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
 
             // Undo
-            Assert.IsTrue(list.Undo());
+            Assert.IsTrue(target.Undo());
 
-            Assert.AreEqual(0, list.Count);
-            Assert.IsFalse(list.CanUndo);
-            Assert.IsTrue (list.CanRedo);
+            Assert.AreEqual(0, target.Count);
+            Assert.IsFalse(target.CanUndo);
+            Assert.IsTrue (target.CanRedo);
 
             // Redo
-            Assert.IsTrue(list.Redo());
+            Assert.IsTrue(target.Redo());
 
-            Assert.AreEqual(1, list.Count);
-            Assert.AreEqual(100, list[0]);
-            Assert.IsTrue (list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
+            Assert.AreEqual(1, target.Count);
+            Assert.AreEqual(100, target[0]);
+            Assert.IsTrue (target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
         }
 
         [TestMethod]
         public void ActionScopeTest()
         {
             // list which support undo/redo.
-            var list = new UndoRedoList<int, List<int>>();
-            Assert.IsFalse(list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
+            var target = new UndoRedoList<int, List<int>>();
+            Assert.IsFalse(target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
 
             // ActionScope
-            using (var scope = new UndoRedoList<int, List<int>>.ActionScope(list)) {
-                // Modify list in ActionScope
-                list.Add(100);
-                list.Add(200);
-                list.Add(300);
+            using (var scope = new UndoRedoList<int, List<int>>.ActionScope(target)) {
+                // Modify target in ActionScope
+                target.Add(100);
+                target.Add(200);
+                target.Add(300);
             }
 
-            Assert.AreEqual(3, list.Count);
-            Assert.AreEqual(100, list[0]);
-            Assert.AreEqual(200, list[1]);
-            Assert.AreEqual(300, list[2]);
-            Assert.IsTrue(list.CanUndo);
+            Assert.AreEqual(3, target.Count);
+            Assert.AreEqual(100, target[0]);
+            Assert.AreEqual(200, target[1]);
+            Assert.AreEqual(300, target[2]);
+            Assert.IsTrue(target.CanUndo);
 
             // Undo
-            Assert.IsTrue(list.Undo());
+            Assert.IsTrue(target.Undo());
             // The 3 actions in ActionScope can undo in one time.
-            Assert.AreEqual(0, list.Count);
-            Assert.IsFalse(list.CanUndo);
+            Assert.AreEqual(0, target.Count);
+            Assert.IsFalse(target.CanUndo);
         }
 
         [TestMethod]
         public void DisabledUndoScopeTest()
         {
             // list which support undo/redo.
-            var list = new UndoRedoList<int, List<int>>();
-            Assert.IsFalse(list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
+            var target = new UndoRedoList<int, List<int>>();
+            Assert.IsFalse(target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
 
             // DisabledUndoScope
-            using (var scope = new UndoRedoList<int, List<int>>.DisabledUndoScope(list)) {
-                // Modify list in DisabledUndoScope
-                list.Add(100);
+            using (var scope = new UndoRedoList<int, List<int>>.DisabledUndoScope(target)) {
+                // Modify target in DisabledUndoScope
+                target.Add(100);
             }
 
             // You can't undo actions in DisabledUndoScope.
-            Assert.IsFalse(list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
+            Assert.IsFalse(target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
+        }
+
+        [TestMethod]
+        public void UndoRedoListTest()
+        {
+            // List which support undo/redo.
+            var target = new UndoRedoList<int>();
+
+            target.Add(100);
+
+            // You can undo/redo also.
+            Assert.IsTrue (target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
+
+            Assert.IsTrue(target.Undo());
+            Assert.IsTrue(target.Redo());
         }
 
         [TestMethod]

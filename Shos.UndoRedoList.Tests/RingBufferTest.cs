@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shos.Collections;
+using System;
 
 namespace Shos.UndoRedoList.Tests
 {
@@ -16,24 +17,78 @@ namespace Shos.UndoRedoList.Tests
         [TestMethod]
         public void Add()
         {
-            var target = new RingBuffer<int>(3) { 100 };
+            const int dividor = 3;
+            var target = new RingBuffer<int>(dividor) { 100 };
             Assert.AreEqual(1, target.Count);
-            Assert.AreEqual(100, target[new ModuloArithmetic(3)]);
+            Assert.AreEqual(100, target[new ModuloArithmetic(dividor)]);
+            Assert.AreEqual(new ModuloArithmetic(dividor), target.TopIndex   );
+            Assert.AreEqual(new ModuloArithmetic(dividor), target.BottomIndex);
+
             target.Add(300);
             Assert.AreEqual(2, target.Count);
-            Assert.AreEqual(100, target[new ModuloArithmetic(3)]);
-            Assert.AreEqual(300, target[new ModuloArithmetic(3) { Value = 1 }]);
+            Assert.AreEqual(100, target[new ModuloArithmetic(dividor)]);
+            Assert.AreEqual(300, target[new ModuloArithmetic(dividor) { Value = 1 }]);
+            Assert.AreEqual(new ModuloArithmetic(dividor)              , target.TopIndex   );
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 1 }, target.BottomIndex);
+
             target.Add(200);
             Assert.AreEqual(3, target.Count);
-            Assert.AreEqual(200, target[new ModuloArithmetic(3) { Value = 2 }]);
+            Assert.AreEqual(200, target[new ModuloArithmetic(dividor) { Value = 2 }]);
+            Assert.AreEqual(new ModuloArithmetic(dividor), target.TopIndex);
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 2 }, target.BottomIndex);
+
             target.Add(-100);
             Assert.AreEqual(3, target.Count);
-            Assert.AreEqual(200, target[new ModuloArithmetic(3) { Value = 2 }]);
-            Assert.AreEqual(-100, target[new ModuloArithmetic(3) { Value = 0 }]);
+            Assert.AreEqual(200, target[new ModuloArithmetic(dividor) { Value = 2 }]);
+            Assert.AreEqual(-100, target[new ModuloArithmetic(dividor) { Value = 0 }]);
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 1 }, target.TopIndex   );
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 0 }, target.BottomIndex);
+
             target.Add(-300);
             Assert.AreEqual(3, target.Count);
-            Assert.AreEqual(-100, target[new ModuloArithmetic(3) { Value = 0 }]);
-            Assert.AreEqual(-300, target[new ModuloArithmetic(3) { Value = 1 }]);
+            Assert.AreEqual(-100, target[new ModuloArithmetic(dividor) { Value = 0 }]);
+            Assert.AreEqual(-300, target[new ModuloArithmetic(dividor) { Value = 1 }]);
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 2 }, target.TopIndex   );
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 1 }, target.BottomIndex);
+        }
+
+        [TestMethod]
+        public void SmallSize()
+        {
+            const int dividor = 2;
+            var target = new RingBuffer<int>(dividor) { 100 };
+            Assert.AreEqual(1, target.Count);
+            Assert.AreEqual(100, target[new ModuloArithmetic(dividor)]);
+            Assert.AreEqual(new ModuloArithmetic(dividor), target.TopIndex   );
+            Assert.AreEqual(new ModuloArithmetic(dividor), target.BottomIndex);
+
+            target.Add(300);
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual(100, target[new ModuloArithmetic(dividor)]);
+            Assert.AreEqual(300, target[new ModuloArithmetic(dividor) { Value = 1 }]);
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 0 }, target.TopIndex   );
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 1 }, target.BottomIndex);
+
+            target.Add(200);
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual(200, target[new ModuloArithmetic(dividor) { Value = 0 }]);
+            Assert.AreEqual(300, target[new ModuloArithmetic(dividor) { Value = 1 }]);
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 1 }, target.TopIndex   );
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 0 }, target.BottomIndex);
+
+            target.Add(-100);
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual( 200, target[new ModuloArithmetic(dividor) { Value = 0 }]);
+            Assert.AreEqual(-100, target[new ModuloArithmetic(dividor) { Value = 1 }]);
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 0 }, target.TopIndex);
+            Assert.AreEqual(new ModuloArithmetic(dividor) { Value = 1 }, target.BottomIndex);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void InitializeWidthOne()
+        {
+            var target = new RingBuffer<int>(1);
         }
 
         [TestMethod]

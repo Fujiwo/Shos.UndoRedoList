@@ -16,12 +16,42 @@ namespace Shos.Collections
             public TElement Element { get; set; }
             public int Index { get; set; } = 0;
 
+            bool IsValidIndex => 0 <= Index && Index < Container.Count;
+
             public Action()
             { }
             public Action(IList<TElement> container, TElement element, int index) => (Container, Element, Index) = (container, element, index);
 
             public abstract void Undo();
             public abstract void Redo();
+
+            protected void Add()
+            {
+                if (IsValidIndex) {
+                    Container.Insert(Index, Element);
+                } else {
+                    Index = Container.Count;
+                    Container.Add(Element);
+                }
+            }
+
+            protected void Remove()
+            {
+                if (IsValidIndex)
+                    Container.RemoveAt(Index);
+            }
+
+            protected void Exchange()
+            {
+                if (IsValidIndex)
+                   Container[Index] = Element;
+            }
+
+            protected void Exchange(TElement element)
+            {
+                if (IsValidIndex)
+                    Container[Index] = element;
+            }
         }
 
         class AddAction : Action
@@ -29,8 +59,8 @@ namespace Shos.Collections
             public AddAction(IList<TElement> container, TElement element, int index) : base(container, element, index)
             {}
 
-            public override void Undo() => Container.RemoveAt(Index);
-            public override void Redo() => Container.Insert(Index, Element);
+            public override void Undo() => Remove();
+            public override void Redo() => Add();
         }
 
         class RemoveAction : Action
@@ -38,8 +68,8 @@ namespace Shos.Collections
             public RemoveAction(IList<TElement> container, TElement element, int index) : base(container, element, index)
             {}
 
-            public override void Undo() => Container.Insert(Index, Element);
-            public override void Redo() => Container.RemoveAt(Index);
+            public override void Undo() => Add();
+            public override void Redo() => Remove();
         }
 
         class ExchangeAction : Action
@@ -48,8 +78,8 @@ namespace Shos.Collections
 
             public TElement OldElement { get; set; }
 
-            public override void Undo() => Container[Index] = OldElement;
-            public override void Redo() => Container[Index] = Element;
+            public override void Undo() => Exchange(OldElement);
+            public override void Redo() => Exchange();
         }
 
         class ActionCollection : Action, IEnumerable<Action>
@@ -107,6 +137,7 @@ namespace Shos.Collections
         /// <summary>You can't undo actions while UndoEnabled is false.</summary>
         public bool UndoEnabled { get; set; } = true;
 
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when maximumUndoTimes is 1 or less.</exception>
         public UndoRedoList(int maximumUndoTimes = ModuloArithmetic.DefaultDivisor)
             => undoBuffer = new UndoRedoRingBuffer<Action>(maximumUndoTimes);
 
@@ -234,5 +265,14 @@ namespace Shos.Collections
             else
                 undoBuffer.Add(action);
         }
+    }
+
+    /// <summary>List which supports undo/redo.</summary>
+    /// <typeparam name="TElement">type of elements</typeparam>
+    public class UndoRedoList<TElement> : UndoRedoList<TElement, List<TElement>>
+    {
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when maximumUndoTimes is 1 or less.</exception>
+        public UndoRedoList(int maximumUndoTimes = ModuloArithmetic.DefaultDivisor) : base(maximumUndoTimes)
+        {}
     }
 }

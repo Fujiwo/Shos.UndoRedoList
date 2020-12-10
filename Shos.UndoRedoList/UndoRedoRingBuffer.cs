@@ -11,11 +11,13 @@
         public bool CanGoBackward => CurrentIndex.IsValid;
         public bool CanGoForward => CurrentIndex != BottomIndex;
 
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when size is 1 or less.</exception>
         public UndoRedoRingBuffer(int size = defaultSize) : base(size) => CurrentIndex = new ModuloArithmetic(size, false);
 
         public override void Add(TElement element)
         {
-            RemoveAfter(CurrentIndex.Next);
+            if (CurrentIndex.Next != TopIndex)
+                RemoveAfter(CurrentIndex.Next);
             base.Add(element);
             CurrentIndex = BottomIndex;
         }

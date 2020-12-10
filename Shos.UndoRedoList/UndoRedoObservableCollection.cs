@@ -11,9 +11,7 @@ namespace Shos.Collections
         public event NotifyCollectionChangedEventHandler CollectionChanged;
         #endregion
 
-        public UndoRedoObservableCollection(int maximumUndoTimes = ModuloArithmetic.DefaultDivisor) : base(maximumUndoTimes)
-        {}
-
-        public UndoRedoObservableCollection() => List.CollectionChanged += (_, e) => CollectionChanged?.Invoke(this, e);
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when maximumUndoTimes is 1 or less.</exception>
+        public UndoRedoObservableCollection(int maximumUndoTimes = ModuloArithmetic.DefaultDivisor) : base(maximumUndoTimes) => List.CollectionChanged += (_, e) => CollectionChanged?.Invoke(this, e);
     }
 }

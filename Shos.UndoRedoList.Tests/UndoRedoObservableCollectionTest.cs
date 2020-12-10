@@ -14,7 +14,7 @@ namespace Shos.UndoRedoList.Tests
         [TestInitialize]
         public void Initialize()
         {
-            target = new UndoRedoObservableCollection<int>();
+            target = new UndoRedoObservableCollection<int>(maximumUndoTimes: 2);
             target.CollectionChanged += OnCollectionChanged;
             notifyCollectionChangedActions = new List<NotifyCollectionChangedAction>();
         }
@@ -27,13 +27,17 @@ namespace Shos.UndoRedoList.Tests
             Assert.AreEqual(1, notifyCollectionChangedActions.Count);
             target.RemoveAt(0);
             Assert.AreEqual(2, notifyCollectionChangedActions.Count);
-            target.Undo();
+            Assert.IsTrue(target.Undo());
             Assert.AreEqual(3, notifyCollectionChangedActions.Count);
-            target.Undo();
+            Assert.IsTrue(target.Undo());
             Assert.AreEqual(4, notifyCollectionChangedActions.Count);
-            target.Redo();
+            Assert.IsFalse(target.Undo());
+            Assert.AreEqual(4, notifyCollectionChangedActions.Count);
+            Assert.IsTrue(target.Redo());
             Assert.AreEqual(5, notifyCollectionChangedActions.Count);
-            target.Redo();
+            Assert.IsTrue(target.Redo());
+            Assert.AreEqual(6, notifyCollectionChangedActions.Count);
+            Assert.IsFalse(target.Redo());
             Assert.AreEqual(6, notifyCollectionChangedActions.Count);
         }
 

@@ -22,6 +22,7 @@ namespace Shos.Collections
             set => elements[index.Value] = value;
         }
 
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown when size is 1 or less.</exception>
         public RingBuffer(int size = defaultSize)
         {
             elements    = new TElement[size];

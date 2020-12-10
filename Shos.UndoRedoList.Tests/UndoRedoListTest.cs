@@ -10,184 +10,234 @@ namespace Shos.UndoRedoList.Tests
         [TestMethod]
         public void Construct()
         {
-            var list = new UndoRedoList<int, List<int>>();
-            Assert.AreEqual(0, list.Count);
-            Assert.AreEqual(0, list.List.Count);
-            Assert.IsFalse(list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
+            var target = new UndoRedoList<int, List<int>>();
+            Assert.AreEqual(0, target.Count);
+            Assert.AreEqual(0, target.List.Count);
+            Assert.IsFalse(target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
         }
 
         [TestMethod]
         public void Undo()
         {
-            var list = new UndoRedoList<int, List<int>>();
-            Assert.IsFalse(list.Undo());
+            var target = new UndoRedoList<int, List<int>>();
+            Assert.IsFalse(target.Undo());
 
-            list.Add(100);
-            Assert.IsTrue(list.CanUndo);
-            Assert.AreEqual(1, list.Count);
-            Assert.AreEqual(100, list[0]);
+            target.Add(100);
+            Assert.IsTrue(target.CanUndo);
+            Assert.AreEqual(1, target.Count);
+            Assert.AreEqual(100, target[0]);
 
-            list.Add(200);
-            Assert.IsTrue(list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
-            Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(100, list[0]);
-            Assert.AreEqual(200, list[1]);
+            target.Add(200);
+            Assert.IsTrue(target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual(100, target[0]);
+            Assert.AreEqual(200, target[1]);
 
-            Assert.IsTrue(list.Undo());
-            Assert.IsTrue(list.CanUndo);
-            Assert.AreEqual(1, list.Count);
-            Assert.AreEqual(100, list[0]);
+            Assert.IsTrue(target.Undo());
+            Assert.IsTrue(target.CanUndo);
+            Assert.AreEqual(1, target.Count);
+            Assert.AreEqual(100, target[0]);
 
-            Assert.IsTrue(list.Undo());
-            Assert.IsFalse(list.CanUndo);
-            Assert.AreEqual(0, list.Count);
+            Assert.IsTrue(target.Undo());
+            Assert.IsFalse(target.CanUndo);
+            Assert.AreEqual(0, target.Count);
 
-            list.Add(300);
-            Assert.IsTrue(list.CanUndo);
-            list.Add(400);
-            list.RemoveAt(0);
-            Assert.IsTrue(list.CanUndo);
-            Assert.AreEqual(1, list.Count);
-            Assert.AreEqual(400, list[0]);
+            target.Add(300);
+            Assert.IsTrue(target.CanUndo);
+            target.Add(400);
+            target.RemoveAt(0);
+            Assert.IsTrue(target.CanUndo);
+            Assert.AreEqual(1, target.Count);
+            Assert.AreEqual(400, target[0]);
 
-            Assert.IsTrue(list.Undo());
-            Assert.IsTrue(list.CanUndo);
-            Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(300, list[0]);
-            Assert.AreEqual(400, list[1]);
+            Assert.IsTrue(target.Undo());
+            Assert.IsTrue(target.CanUndo);
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual(300, target[0]);
+            Assert.AreEqual(400, target[1]);
 
-            list.Add(500);
-            list[list.Count - 1] = 600;
-            Assert.AreEqual(3, list.Count);
-            Assert.AreEqual(600, list[list.Count - 1]);
-            Assert.IsTrue(list.CanUndo);
-            Assert.IsTrue(list.Undo());
-            Assert.AreEqual(3, list.Count);
-            Assert.AreEqual(500, list[list.Count - 1]);
+            target.Add(500);
+            target[target.Count - 1] = 600;
+            Assert.AreEqual(3, target.Count);
+            Assert.AreEqual(600, target[target.Count - 1]);
+            Assert.IsTrue(target.CanUndo);
+            Assert.IsTrue(target.Undo());
+            Assert.AreEqual(3, target.Count);
+            Assert.AreEqual(500, target[target.Count - 1]);
 
-            list.Clear();
-            Assert.AreEqual(0, list.Count);
-            Assert.IsTrue(list.CanUndo);
-            Assert.IsTrue(list.Undo());
-            Assert.AreEqual(3, list.Count);
-            Assert.AreEqual(300, list[0]);
-            Assert.AreEqual(400, list[1]);
-            Assert.AreEqual(500, list[2]);
+            target.Clear();
+            Assert.AreEqual(0, target.Count);
+            Assert.IsTrue(target.CanUndo);
+            Assert.IsTrue(target.Undo());
+            Assert.AreEqual(3, target.Count);
+            Assert.AreEqual(300, target[0]);
+            Assert.AreEqual(400, target[1]);
+            Assert.AreEqual(500, target[2]);
         }
 
         [TestMethod]
         public void Redo()
         {
-            var list = new UndoRedoList<int, List<int>> { 100, 200 };
-            Assert.IsFalse(list.CanRedo);
-            Assert.IsFalse(list.Redo());
+            var target = new UndoRedoList<int, List<int>> { 100, 200 };
+            Assert.IsFalse(target.CanRedo);
+            Assert.IsFalse(target.Redo());
 
-            list.Undo();
-            Assert.IsTrue(list.CanRedo);
+            target.Undo();
+            Assert.IsTrue(target.CanRedo);
 
-            Assert.IsTrue(list.Redo());
-            Assert.IsFalse(list.CanRedo);
-            Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(100, list[0]);
-            Assert.AreEqual(200, list[1]);
+            Assert.IsTrue(target.Redo());
+            Assert.IsFalse(target.CanRedo);
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual(100, target[0]);
+            Assert.AreEqual(200, target[1]);
 
-            list.Undo();
-            Assert.IsTrue(list.CanRedo);
-            list.Add(300);
-            Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(100, list[0]);
-            Assert.AreEqual(300, list[1]);
-            Assert.IsFalse(list.CanRedo);
+            target.Undo();
+            Assert.IsTrue(target.CanRedo);
+            target.Add(300);
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual(100, target[0]);
+            Assert.AreEqual(300, target[1]);
+            Assert.IsFalse(target.CanRedo);
 
-            list.RemoveAt(0);
-            list.Undo();
-            Assert.IsTrue(list.CanRedo);
+            target.RemoveAt(0);
+            target.Undo();
+            Assert.IsTrue(target.CanRedo);
 
-            Assert.IsTrue(list.Redo());
-            Assert.IsFalse(list.CanRedo);
-            Assert.AreEqual(1, list.Count);
-            Assert.AreEqual(300, list[0]);
+            Assert.IsTrue(target.Redo());
+            Assert.IsFalse(target.CanRedo);
+            Assert.AreEqual(1, target.Count);
+            Assert.AreEqual(300, target[0]);
 
-            list.Add(500);
-            list[list.Count - 1] = 600;
-            Assert.AreEqual(2, list.Count);
-            list.Undo();
-            Assert.IsTrue(list.CanRedo);
-            Assert.IsTrue(list.Redo());
-            Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(600, list[list.Count - 1]);
+            target.Add(500);
+            target[target.Count - 1] = 600;
+            Assert.AreEqual(2, target.Count);
+            target.Undo();
+            Assert.IsTrue(target.CanRedo);
+            Assert.IsTrue(target.Redo());
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual(600, target[target.Count - 1]);
 
-            list.Clear();
-            list.Undo();
-            Assert.IsTrue(list.CanRedo);
-            Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(300, list[0]);
-            Assert.AreEqual(600, list[1]);
-            Assert.IsTrue(list.Redo());
-            Assert.AreEqual(0, list.Count);
-            Assert.IsTrue(list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
+            target.Clear();
+            target.Undo();
+            Assert.IsTrue(target.CanRedo);
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual(300, target[0]);
+            Assert.AreEqual(600, target[1]);
+            Assert.IsTrue(target.Redo());
+            Assert.AreEqual(0, target.Count);
+            Assert.IsTrue(target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
+        }
+
+        [TestMethod]
+        public void MaximumUndoTimes()
+        {
+            // List which support undo/redo.
+            // maximumUndoTimes is 2.
+            var target = new UndoRedoList<int>(maximumUndoTimes: 2);
+
+            // Add an element 3 times.
+            target.Add(100);
+            target.Add(200);
+            target.Add(300);
+
+            // You can undo 2 times.
+            Assert.IsTrue (target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
+            Assert.IsTrue (target.Undo());
+
+            Assert.IsTrue (target.CanUndo);
+            Assert.IsTrue (target.CanRedo);
+            Assert.IsTrue (target.Undo());
+
+            // You can redo 2 times also.
+            Assert.IsFalse(target.CanUndo);
+            Assert.IsTrue (target.CanRedo);
+            Assert.IsTrue (target.Redo());
+
+            //Assert.IsTrue (target.CanUndo);
+            //Assert.IsTrue (target.CanRedo);
+            //Assert.IsTrue (target.Redo());
+
+            //Assert.IsTrue (target.CanUndo);
+            //Assert.IsFalse(target.CanRedo);
         }
 
         [TestMethod]
         public void ActionScope()
         {
-            var list = new UndoRedoList<int, List<int>> { 100, 200 };
-            using (var scope = new UndoRedoList<int, List<int>>.ActionScope(list)) {
-                list.Add(300);
-                list.RemoveAt(0);
-                list.RemoveAt(1);
-                list.Add(400);
-                list.Add(500);
+            var target = new UndoRedoList<int, List<int>> { 100, 200 };
+            using (var scope = new UndoRedoList<int, List<int>>.ActionScope(target)) {
+                target.Add(300);
+                target.RemoveAt(0);
+                target.RemoveAt(1);
+                target.Add(400);
+                target.Add(500);
             }
-            Assert.AreEqual(3, list.Count);
-            Assert.AreEqual(200, list[0]);
-            Assert.AreEqual(400, list[1]);
-            Assert.AreEqual(500, list[2]);
-            Assert.IsTrue(list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
+            Assert.AreEqual(3, target.Count);
+            Assert.AreEqual(200, target[0]);
+            Assert.AreEqual(400, target[1]);
+            Assert.AreEqual(500, target[2]);
+            Assert.IsTrue(target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
 
-            Assert.IsTrue(list.Undo());
-            Assert.IsTrue(list.CanUndo);
-            Assert.IsTrue(list.CanRedo);
-            Assert.AreEqual(2, list.Count);
-            Assert.AreEqual(100, list[0]);
-            Assert.AreEqual(200, list[1]);
+            Assert.IsTrue(target.Undo());
+            Assert.IsTrue(target.CanUndo);
+            Assert.IsTrue(target.CanRedo);
+            Assert.AreEqual(2, target.Count);
+            Assert.AreEqual(100, target[0]);
+            Assert.AreEqual(200, target[1]);
 
-            Assert.IsTrue(list.Redo());
-            Assert.IsTrue(list.CanUndo);
-            Assert.IsFalse(list.CanRedo);
-            Assert.AreEqual(3, list.Count);
-            Assert.AreEqual(200, list[0]);
-            Assert.AreEqual(400, list[1]);
-            Assert.AreEqual(500, list[2]);
+            Assert.IsTrue(target.Redo());
+            Assert.IsTrue(target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
+            Assert.AreEqual(3, target.Count);
+            Assert.AreEqual(200, target[0]);
+            Assert.AreEqual(400, target[1]);
+            Assert.AreEqual(500, target[2]);
         }
 
         [TestMethod]
         public void DisabledUndoScope()
         {
-            var list = new UndoRedoList<int, List<int>> { 100 };
-            Assert.IsTrue(list.CanUndo);
+            var target = new UndoRedoList<int, List<int>> { 100 };
+            Assert.IsTrue(target.CanUndo);
 
-            using (var scope = new UndoRedoList<int, List<int>>.DisabledUndoScope(list))
-                list.Add(200);
+            using (var scope = new UndoRedoList<int, List<int>>.DisabledUndoScope(target))
+                target.Add(200);
 
-            Assert.IsTrue(list.CanUndo);
-            Assert.IsTrue(list.Undo());
-            Assert.IsFalse(list.CanUndo);
-            list.Add(300);
-            Assert.IsTrue(list.CanUndo);
+            Assert.IsTrue(target.CanUndo);
+            Assert.IsTrue(target.Undo());
+            Assert.IsFalse(target.CanUndo);
+            target.Add(300);
+            Assert.IsTrue(target.CanUndo);
         }
 
         [TestMethod]
         public void ClearUndo()
         {
-            var list = new UndoRedoList<int, List<int>> { 100, 200, 300 };
-            Assert.IsTrue(list.CanUndo);
-            list.ClearUndo();
-            Assert.IsFalse(list.CanUndo);
+            var target = new UndoRedoList<int, List<int>> { 100, 200, 300 };
+            Assert.IsTrue(target.CanUndo);
+            target.ClearUndo();
+            Assert.IsFalse(target.CanUndo);
+        }
+
+        [TestMethod]
+        public void AnotherUndoRedoList()
+        {
+            // List which support undo/redo.
+            var target = new UndoRedoList<int>(maximumUndoTimes: 2);
+
+            target.Add(100);
+            target.RemoveAt(0);
+            Assert.IsTrue (target.Undo());
+            Assert.IsTrue (target.Undo());
+            Assert.IsFalse(target.Undo());
+            Assert.IsTrue (target.Redo());
+            Assert.IsTrue (target.Redo());
+            Assert.IsFalse(target.Redo());
         }
     }
 }
