@@ -47,7 +47,7 @@ Sample [WPF](https://docs.microsoft.com/visualstudio/designers/getting-started-w
 [IList](https://docs.microsoft.com/dotnet/api/system.collections.ilist) implemented collection which supports undo/redo.
 
 
-### class [UndoRedoList<TElement>](Shos.UndoRedoList/UndoRedoList.cs) : IList<TElement> where TList : IList<TElement>, new()
+### class [UndoRedoList<TElement>](Shos.UndoRedoList/UndoRedoList.cs) : UndoRedoList<TElement, List<TElement>>
 
 [List](https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1) implemented collection which supports undo/redo.
 
