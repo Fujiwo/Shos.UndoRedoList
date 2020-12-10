@@ -10,15 +10,15 @@ You can install Shos.UndoRedoList to your project with [NuGet](https://www.nuget
 
 ### Package Manager
 
-    PM>Install-Package Shos.UndoRedoList -version 1.0.2
+    PM>Install-Package Shos.UndoRedoList -version 1.0.3
 
 ### .NET CLI
 
-    >dotnet add package Shos.UndoRedoList --version 1.0.2
+    >dotnet add package Shos.UndoRedoList --version 1.0.3
 
 ### PackageReference
 
-    <PackageReference Include="Shos.UndoRedoList" Version="1.0.2" />
+    <PackageReference Include="Shos.UndoRedoList" Version="1.0.3" />
 
 ## Projects
 
@@ -36,7 +36,7 @@ Performance tests for Shos.UndoRedoList.
 
 * [Shos.UndoRedoList.SampleApp](Shos.UndoRedoList.SampleApp)
 
-Sample WPF app for UndoRedoObservableCollection.
+Sample [WPF](https://docs.microsoft.com/visualstudio/designers/getting-started-with-wpf) app for UndoRedoObservableCollection.
 
 ![Shos.UndoRedoList.SampleApp](https://raw.githubusercontent.com/Fujiwo/Shos.UndoRedoList/master/Images/Shos.UndoRedoList.SampleApp.png "Shos.UndoRedoList.SampleApp")
 
@@ -238,4 +238,4 @@ Fujio Kojima: a software developer in Japan
 
 ## License
 
-This library is under the MIT License.
+This library is under the [MIT License](https://raw.githubusercontent.com/Fujiwo/Shos.UndoRedoList/master/LICENSE).
