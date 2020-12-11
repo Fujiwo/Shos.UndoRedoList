@@ -108,17 +108,17 @@ namespace Shos.UndoRedoList.Tests
         public void UndoRedoObservableCollectionTest()
         {
             // ObservableCollection which support undo/redo.
-            var observableCollection = new UndoRedoObservableCollection<int>();
-            observableCollection.CollectionChanged += ObservableCollection_CollectionChanged;
+            var target = new UndoRedoObservableCollection<int>();
+            target.CollectionChanged += ObservableCollection_CollectionChanged;
 
-            observableCollection.Add(100);
+            target.Add(100);
 
             // You can undo/redo also.
-            Assert.IsTrue (observableCollection.CanUndo);
-            Assert.IsFalse(observableCollection.CanRedo);
+            Assert.IsTrue (target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
 
-            Assert.IsTrue(observableCollection.Undo());
-            Assert.IsTrue(observableCollection.Redo());
+            Assert.IsTrue(target.Undo());
+            Assert.IsTrue(target.Redo());
 
             // event handler
             static void ObservableCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
