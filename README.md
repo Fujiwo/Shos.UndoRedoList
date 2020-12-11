@@ -42,30 +42,30 @@ Sample [WPF](https://docs.microsoft.com/visualstudio/designers/getting-started-w
 
 ## Types
 
-### class [UndoRedoList`<TElement, TList`>](Shos.UndoRedoList/UndoRedoList.cs) : IList`<TElement`> where TList : IList`<TElement`>, new()
+### class [UndoRedoList`<TElement, TList>`](Shos.UndoRedoList/UndoRedoList.cs) : IList`<TElement>` where TList : IList`<TElement>`, new()
 
 [IList](https://docs.microsoft.com/dotnet/api/system.collections.ilist) implemented collection which supports undo/redo.
 
 
-### class [UndoRedoList`<TElement`>](Shos.UndoRedoList/UndoRedoList.cs) : UndoRedoList`<TElement, List`<TElement`>`>
+### class [UndoRedoList`<TElement>`](Shos.UndoRedoList/UndoRedoList.cs) : UndoRedoList`<TElement, List<TElement>>`
 
 [List](https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1) implemented collection which supports undo/redo.
 
-### class [UndoRedoObservableCollection`<TElement`>](Shos.UndoRedoList/UndoRedoObservableCollection.cs) : UndoRedoList`<TElement, ObservableCollection`<TElement`>`>, INotifyCollectionChanged
+### class [UndoRedoObservableCollection`<TElement>`](Shos.UndoRedoList/UndoRedoObservableCollection.cs) : UndoRedoList`<TElement, ObservableCollection<TElement>>`, INotifyCollectionChanged
 
 [ObservableCollection](https://docs.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1) which supports undo/redo.
 
-### class [RingBuffer`<TElement`>](Shos.UndoRedoList/RingBuffer.cs) : IEnumerable`<TElement`>
+### class [RingBuffer`<TElement>`](Shos.UndoRedoList/RingBuffer.cs) : IEnumerable`<TElement>`
 
 [Circular buffer - Wikipedia](https://en.wikipedia.org/wiki/Circular_buffer)
 
 > In computer science, a circular buffer, circular queue, cyclic buffer or ring buffer is a data structure that uses a single, fixed-size buffer as if it were connected end-to-end. This structure lends itself easily to buffering data streams.
 
-### class [UndoRedoRingBuffer`<TElement`>](Shos.UndoRedoList/UndoRedoRingBuffer.cs) : RingBuffer`<TElement`>
+### class [UndoRedoRingBuffer<TElement>](Shos.UndoRedoList/UndoRedoRingBuffer.cs) : RingBuffer`<TElement>`
 
 Specialized RingBuffer for undo/redo.
 
-### struct [ModuloArithmetic](Shos.UndoRedoList/ModuloArithmetic.cs) : IEquatable`<ModuloArithmetic`>
+### struct [ModuloArithmetic](Shos.UndoRedoList/ModuloArithmetic.cs) : IEquatable`<ModuloArithmetic>`
 
 [Modular arithmetic - Wikipedia](https://en.wikipedia.org/wiki/Modular_arithmetic)
 
