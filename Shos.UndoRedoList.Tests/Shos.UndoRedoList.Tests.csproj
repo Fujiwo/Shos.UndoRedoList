@@ -1,38 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-
+    <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
-
-    <Copyright>Copyright © 2020 Fujio Kojima</Copyright>
-
+    <Copyright>Copyright © 2020-2024 Fujio Kojima</Copyright>
     <RepositoryUrl>https://github.com/Fujiwo/Shos.UndoRedoList</RepositoryUrl>
-
     <Authors>Fujio Kojima</Authors>
-
     <Company>Sho's Software</Company>
-
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-
     <PackageProjectUrl>https://github.com/Fujiwo/Shos.UndoRedoList</PackageProjectUrl>
-
     <NeutralLanguage>en</NeutralLanguage>
-
     <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
-
     <Description>Tests for Shos.UndoRedoList.</Description>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.0" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.0" />
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Shos.UndoRedoList\Shos.UndoRedoList.csproj" />
   </ItemGroup>
-
 </Project>

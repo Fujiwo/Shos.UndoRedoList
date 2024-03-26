@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Shos.Collections</RootNamespace>
-    <Copyright>Copyright © 2020 Fujio Kojima</Copyright>
+    <Copyright>Copyright © 2020-2024 Fujio Kojima</Copyright>
     <RepositoryUrl>https://github.com/Fujiwo/Shos.UndoRedoList</RepositoryUrl>
     <Authors>Fujio Kojima</Authors>
     <Company>Sho's Software</Company>
@@ -13,14 +12,14 @@
     <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>1.0.3.0</AssemblyVersion>
-    <FileVersion>1.0.3.0</FileVersion>
-    <Version>1.0.3</Version>
+    <AssemblyVersion>1.0.4.0</AssemblyVersion>
+    <FileVersion>1.0.4.0</FileVersion>
+    <Version>1.0.4</Version>
     <Description>Types for collection which supports undo/redo.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
-
   <ItemGroup>
     <Folder Include="Documents\ClassDiagrams\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
-
 </Project>

@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{C8063C
 		Images\Shos.UndoRedoList.SampleApp.png = Images\Shos.UndoRedoList.SampleApp.png
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shos.UndoRedoList.PerformanceTests", "Shos.UndoRedoList.PerformanceTests\Shos.UndoRedoList.PerformanceTests.csproj", "{10BA1AA9-65CD-4FB0-AB41-80B6097E664E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shos.UndoRedoList.PerformanceTests", "Shos.UndoRedoList.PerformanceTests\Shos.UndoRedoList.PerformanceTests.csproj", "{10BA1AA9-65CD-4FB0-AB41-80B6097E664E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
