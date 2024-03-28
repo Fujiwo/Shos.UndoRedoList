@@ -38,7 +38,7 @@ namespace Shos.Collections
         }
 
         #region IEquatable<T> implementation
-        public bool Equals(ModuloArithmetic item) => this.Equals(item);
+        public bool Equals(ModuloArithmetic item) => Value.Equals(item.Value);
         #endregion
         public override bool Equals(object item) => Value.Equals(((ModuloArithmetic)item).Value);
         public override int GetHashCode() => Value.GetHashCode();

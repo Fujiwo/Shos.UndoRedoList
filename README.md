@@ -10,15 +10,15 @@ You can install Shos.UndoRedoList to your project with [NuGet](https://www.nuget
 
 ### Package Manager
 
-    PM>Install-Package Shos.UndoRedoList -version 1.0.4
+    PM>Install-Package Shos.UndoRedoList -version 1.0.5
 
 ### .NET CLI
 
-    >dotnet add package Shos.UndoRedoList --version 1.0.4
+    >dotnet add package Shos.UndoRedoList --version 1.0.5
 
 ### PackageReference
 
-    <PackageReference Include="Shos.UndoRedoList" Version="1.0.4" />
+    <PackageReference Include="Shos.UndoRedoList" Version="1.0.5" />
 
 ## Projects
 

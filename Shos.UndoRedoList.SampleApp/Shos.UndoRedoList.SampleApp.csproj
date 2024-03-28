@@ -14,7 +14,11 @@
     <Description>Sample WPF app for UndoRedoObservableCollection.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.12.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shos.UndoRedoList\Shos.UndoRedoList.csproj" />
