@@ -230,7 +230,7 @@ Fujio Kojima: a software developer in Japan
 * Microsoft MVP for .NET (Jan. 2015 - Oct. 2015)
 * Microsoft MVP for Visual Studio and Development Technologies (Nov. 2015 - Jun. 2018)
 * Microsoft MVP for Developer Technologies (Nov. 2018 - Jun. 2025)
-* [MVP Profile](https://mvp.microsoft.com/en-us/PublicProfile/21482)
+* [MVP Profile](https://mvp.microsoft.com/en-US/mvp/profile/4185d172-3c9a-e411-93f2-9cb65495d3c4)
 * [Blog (Japanese)](http://wp.shos.info)
 * [Web Site (Japanese)](http://www.shos.info)
 * [Twitter](https://twitter.com/Fujiwo)
