@@ -24,12 +24,14 @@ list.Redo();           // avocado, banana
 - **記録しない変更**: `DisabledUndoScope` 内で行った変更は記録されません (初期データの読み込みなどに便利です)。
 - **履歴数の上限**: Undo できる回数には上限 (既定値: 100) があるため、メモリ使用量が際限なく増えることはありません。
 - **WPF / MVVM に対応**: `UndoRedoObservableCollection<T>` は `CollectionChanged` を発行するので、そのまま `ItemsSource` にバインドできます。
+- **スレッドセーフ版**: `SynchronizedUndoRedoList<T>` は複数のスレッドから使えます。
 - **依存関係なし**: .NET の基本クラスライブラリだけに依存する小さなライブラリです。
 
 ## 対応フレームワーク
 
 | パッケージのバージョン | 対象フレームワーク |
 |---|---|
+| 1.0.7 | .NET 8.0、.NET 10.0 |
 | 1.0.6 | .NET 8.0、.NET 10.0 |
 | 1.0.5 | .NET 8.0 |
 
@@ -50,7 +52,7 @@ PM> Install-Package Shos.UndoRedoList
 プロジェクト ファイルに直接書く場合:
 
 ```xml
-<PackageReference Include="Shos.UndoRedoList" Version="1.0.6" />
+<PackageReference Include="Shos.UndoRedoList" Version="1.0.7" />
 ```
 
 すべての型は `Shos.Collections` 名前空間にあります。
@@ -207,6 +209,50 @@ list.Add(1);
 ObservableCollection<int> inner = list.List; // 内部のコレクションを読み取る
 ```
 
+### 複数のスレッドから使う: `SynchronizedUndoRedoList<T>`
+
+`UndoRedoList<T>` はスレッドセーフではありません。複数のスレッドから使う場合は、代わりに `SynchronizedUndoRedoList<T>` を使ってください。すべてのメンバーが 1 つのロック (`SyncRoot`) で排他制御されます。
+
+```csharp
+var list = new SynchronizedUndoRedoList<int>();
+Parallel.For(0, 100, i => list.Add(i)); // OK
+```
+
+`Count` や `CanUndo` などの値は、読み取った直後に古くなっている可能性があります。「確認してから操作する」書き方はしないでください。
+
+```csharp
+// NG: 確認してから操作するまでの間に、別のスレッドがリストを変更するかもしれない
+if (list.CanUndo)
+    list.Undo();
+if (list.Count > 0)
+    list.RemoveAt(0);
+
+// OK: 戻り値を使う
+var undone = list.Undo();
+
+// OK: ExecuteAsOneAction で複数の操作をまとめて実行する (1 回分の Undo になる)
+var removed = list.ExecuteAsOneAction(items => {
+    if (items.Count == 0)
+        return false;
+    items.RemoveAt(0);
+    return true;
+});
+```
+
+`ActionScope` の代わりに `ExecuteAsOneAction` を、`DisabledUndoScope` の代わりに `ExecuteWithoutUndo` を使います。
+
+```csharp
+list.ExecuteAsOneAction(items => {   // 1 回分の Undo になる
+    items.Add(1);
+    items.Add(2);
+});
+list.ExecuteWithoutUndo(items => items.Add(3)); // 記録されない
+```
+
+デリゲートはロックを持ったまま実行されます。処理は短くし、`items` をデリゲートの外に持ち出さず、デリゲートの中で `ExecuteAsOneAction` を呼んだり `await` したりしないでください。
+
+列挙 (`foreach`) は、列挙を始めた時点の**スナップショット**に対して行われます。そのため、列挙中に別のスレッドがリストを変更しても問題ありません。`ToArray()` もコピーを返します。
+
 ## API
 
 ### 型
@@ -218,6 +264,8 @@ ObservableCollection<int> inner = list.List; // 内部のコレクションを�
 | `UndoRedoList<TElement, TList>` | 基底クラス。任意の `TList : IList<TElement>, new()` に Undo / Redo の機能を付けます。 |
 | `UndoRedoList<TElement, TList>.ActionScope` | `IDisposable`。スコープ内の変更を 1 回分の Undo にまとめます。 |
 | `UndoRedoList<TElement, TList>.DisabledUndoScope` | `IDisposable`。スコープ内の変更を記録しません。 |
+| `SynchronizedUndoRedoList<TElement>` | スレッドセーフな `UndoRedoList<TElement>`。 |
+| `SynchronizedUndoRedoList<TElement, TList>` | スレッドセーフな `UndoRedoList<TElement, TList>`。 |
 
 ### `UndoRedoList<TElement, TList>` のメンバー
 
@@ -235,12 +283,27 @@ ObservableCollection<int> inner = list.List; // 内部のコレクションを�
 | `void BeginActions()` / `void EndActions()` | `ActionScope` の低レベル版です。通常は `ActionScope` を使ってください。 |
 | `TList List` | 内部のコレクション。**読み取り専用として使ってください。** [注意事項](#注意事項)を参照してください。 |
 
+### `SynchronizedUndoRedoList<TElement, TList>` のメンバー
+
+`IList<TElement>` のメンバーと `Undo()`、`Redo()`、`CanUndo`、`CanRedo`、`ClearUndo()` に加えて、次のメンバーがあります。
+
+| メンバー | 説明 |
+|---|---|
+| `SynchronizedUndoRedoList(int maximumUndoTimes = 100)` | コンストラクター。`maximumUndoTimes` は Undo できる最大回数 (2 以上) です。 |
+| `object SyncRoot` | ロック用のオブジェクト。複数の操作をまとめて排他制御したいときにロックします。 |
+| `bool UndoEnabled` | 読み取り専用。記録しない変更を行うには `ExecuteWithoutUndo` を使ってください。 |
+| `void ExecuteAsOneAction(Action<IList<TElement>>)` | ロックを持ったまま処理を実行します。その中の変更は 1 回分の Undo になります。 |
+| `TResult ExecuteAsOneAction<TResult>(Func<IList<TElement>, TResult>)` | 上と同じで、結果を返します。 |
+| `void ExecuteWithoutUndo(Action<IList<TElement>>)` | ロックを持ったまま処理を実行します。その中の変更は記録されません。 |
+| `TElement[] ToArray()` | 要素のコピーを返します。 |
+| `GetEnumerator()` | 要素のスナップショットを列挙します。 |
+
 ## 注意事項
 
 - **記録されるのはコレクションへの変更だけです。** 要素のプロパティの変更 (`list[0].Name = "x"` など) は記録されません。このような変更を元に戻せるようにするには、要素自体を置き換えてください: `list[0] = newItem`
 - **`List` を直接変更しないでください。** 内部のコレクションを通じた変更は記録されず、履歴との整合性が崩れます。
 - **空のリストに対する `Clear()` は記録されません。**
-- **スレッドセーフではありません。** 1 つのスレッド (UI スレッドなど) から使うか、自分で排他制御を行ってください。
+- **`UndoRedoList<T>` と `UndoRedoObservableCollection<T>` はスレッドセーフではありません。** 1 つのスレッド (UI スレッドなど) から使うか、[`SynchronizedUndoRedoList<T>`](#複数のスレッドから使う-synchronizedundoredolistt) を使ってください。
 - `ActionScope` 内で例外が発生した場合、例外の前に行われた変更は 1 回分の Undo として記録されます。
 
 ## しくみ
@@ -270,6 +333,10 @@ dotnet test Shos.UndoRedoList.Tests
 ```
 
 ## リリース ノート
+
+### 1.0.7
+
+- スレッドセーフ版の `SynchronizedUndoRedoList<T>` を追加しました。
 
 ### 1.0.6
 

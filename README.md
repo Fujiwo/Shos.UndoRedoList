@@ -24,12 +24,14 @@ list.Redo();           // avocado, banana
 - **Untracked changes**: changes inside a `DisabledUndoScope` are not recorded (e.g. loading initial data).
 - **Bounded history**: the number of undo steps is limited (default: 100), so memory use doesn't grow without limit.
 - **WPF / MVVM friendly**: `UndoRedoObservableCollection<T>` raises `CollectionChanged`, so you can bind it to `ItemsSource` directly.
+- **Thread-safe version**: `SynchronizedUndoRedoList<T>` can be used from multiple threads.
 - **No dependencies**: a small library that depends only on the .NET base class library.
 
 ## Supported frameworks
 
 | Package version | Target frameworks |
 |---|---|
+| 1.0.7 | .NET 8.0, .NET 10.0 |
 | 1.0.6 | .NET 8.0, .NET 10.0 |
 | 1.0.5 | .NET 8.0 |
 
@@ -50,7 +52,7 @@ PM> Install-Package Shos.UndoRedoList
 Or, in your project file:
 
 ```xml
-<PackageReference Include="Shos.UndoRedoList" Version="1.0.6" />
+<PackageReference Include="Shos.UndoRedoList" Version="1.0.7" />
 ```
 
 All types are in the `Shos.Collections` namespace.
@@ -207,6 +209,50 @@ list.Add(1);
 ObservableCollection<int> inner = list.List; // Read the inner collection.
 ```
 
+### Use from multiple threads: `SynchronizedUndoRedoList<T>`
+
+`UndoRedoList<T>` is not thread-safe. To use the list from multiple threads, use `SynchronizedUndoRedoList<T>` instead. Every member is synchronized with one lock (`SyncRoot`).
+
+```csharp
+var list = new SynchronizedUndoRedoList<int>();
+Parallel.For(0, 100, i => list.Add(i)); // OK
+```
+
+Values such as `Count` and `CanUndo` may be out of date as soon as you read them, so don't "check then act":
+
+```csharp
+// NG: another thread may change the list between the check and the action.
+if (list.CanUndo)
+    list.Undo();
+if (list.Count > 0)
+    list.RemoveAt(0);
+
+// OK: use the return value.
+var undone = list.Undo();
+
+// OK: do several operations atomically with ExecuteAsOneAction (they are undone as one step).
+var removed = list.ExecuteAsOneAction(items => {
+    if (items.Count == 0)
+        return false;
+    items.RemoveAt(0);
+    return true;
+});
+```
+
+Use `ExecuteAsOneAction` instead of `ActionScope`, and `ExecuteWithoutUndo` instead of `DisabledUndoScope`:
+
+```csharp
+list.ExecuteAsOneAction(items => {   // Undone as one step.
+    items.Add(1);
+    items.Add(2);
+});
+list.ExecuteWithoutUndo(items => items.Add(3)); // Not recorded.
+```
+
+The delegate runs while holding the lock. Keep it short, don't keep `items` after it returns, don't call `ExecuteAsOneAction` from it, and don't `await` in it.
+
+Enumerating (`foreach`) returns a **snapshot** taken when enumeration starts, so other threads can change the list while you enumerate it. `ToArray()` also returns a copy.
+
 ## API
 
 ### Types
@@ -218,6 +264,8 @@ ObservableCollection<int> inner = list.List; // Read the inner collection.
 | `UndoRedoList<TElement, TList>` | The base class. Adds undo/redo to any `TList : IList<TElement>, new()`. |
 | `UndoRedoList<TElement, TList>.ActionScope` | `IDisposable`. Groups the changes made in the scope into one undo step. |
 | `UndoRedoList<TElement, TList>.DisabledUndoScope` | `IDisposable`. Changes made in the scope are not recorded. |
+| `SynchronizedUndoRedoList<TElement>` | A thread-safe `UndoRedoList<TElement>`. |
+| `SynchronizedUndoRedoList<TElement, TList>` | A thread-safe `UndoRedoList<TElement, TList>`. |
 
 ### Members of `UndoRedoList<TElement, TList>`
 
@@ -235,12 +283,27 @@ In addition to the `IList<TElement>` members:
 | `void BeginActions()` / `void EndActions()` | Low-level versions of `ActionScope`. Prefer `ActionScope`. |
 | `TList List` | The inner collection. **Read only from it.** See [Notes](#notes). |
 
+### Members of `SynchronizedUndoRedoList<TElement, TList>`
+
+In addition to the `IList<TElement>` members, `Undo()`, `Redo()`, `CanUndo`, `CanRedo` and `ClearUndo()`:
+
+| Member | Description |
+|---|---|
+| `SynchronizedUndoRedoList(int maximumUndoTimes = 100)` | Constructor. `maximumUndoTimes` is the maximum number of undo steps (2 or more). |
+| `object SyncRoot` | The lock object. Lock it to do several operations atomically. |
+| `bool UndoEnabled` | Read only. Use `ExecuteWithoutUndo` to make changes that are not recorded. |
+| `void ExecuteAsOneAction(Action<IList<TElement>>)` | Runs the action while holding the lock. Its changes are undone as one step. |
+| `TResult ExecuteAsOneAction<TResult>(Func<IList<TElement>, TResult>)` | Same as above, and returns the result. |
+| `void ExecuteWithoutUndo(Action<IList<TElement>>)` | Runs the action while holding the lock. Its changes are not recorded. |
+| `TElement[] ToArray()` | Returns a copy of the elements. |
+| `GetEnumerator()` | Enumerates a snapshot of the elements. |
+
 ## Notes
 
 - **Only changes to the collection are recorded.** Changes to the properties of an element (e.g. `list[0].Name = "x"`) are not recorded. To make such a change undoable, replace the element: `list[0] = newItem`.
 - **Don't modify `List` directly.** Changes made through the inner collection are not recorded and make the history inconsistent.
 - **`Clear()` on an empty list is not recorded.**
-- **Not thread-safe.** Use it from one thread (e.g. the UI thread), or synchronize access yourself.
+- **`UndoRedoList<T>` and `UndoRedoObservableCollection<T>` are not thread-safe.** Use them from one thread (e.g. the UI thread), or use [`SynchronizedUndoRedoList<T>`](#use-from-multiple-threads-synchronizedundoredolistt).
 - If an exception is thrown inside an `ActionScope`, the changes made before the exception are recorded as one undo step.
 
 ## How it works
@@ -270,6 +333,10 @@ dotnet test Shos.UndoRedoList.Tests
 ```
 
 ## Release notes
+
+### 1.0.7
+
+- Added `SynchronizedUndoRedoList<T>`, a thread-safe version.
 
 ### 1.0.6
 
