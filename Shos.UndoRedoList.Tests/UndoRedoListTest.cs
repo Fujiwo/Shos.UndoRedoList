@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shos.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Shos.UndoRedoList.Tests
 {
@@ -152,17 +153,99 @@ namespace Shos.UndoRedoList.Tests
             Assert.IsTrue (target.CanRedo);
             Assert.IsTrue (target.Undo());
 
-            // You can redo 2 times also.
             Assert.IsFalse(target.CanUndo);
+            CollectionAssert.AreEqual(new[] { 100 }, target.ToArray());
+
+            // You can redo 2 times also.
             Assert.IsTrue (target.CanRedo);
             Assert.IsTrue (target.Redo());
+            CollectionAssert.AreEqual(new[] { 100, 200 }, target.ToArray());
 
-            //Assert.IsTrue (target.CanUndo);
-            //Assert.IsTrue (target.CanRedo);
-            //Assert.IsTrue (target.Redo());
+            Assert.IsTrue (target.CanUndo);
+            Assert.IsTrue (target.CanRedo);
+            Assert.IsTrue (target.Redo());
+            CollectionAssert.AreEqual(new[] { 100, 200, 300 }, target.ToArray());
 
-            //Assert.IsTrue (target.CanUndo);
-            //Assert.IsFalse(target.CanRedo);
+            Assert.IsTrue (target.CanUndo);
+            Assert.IsFalse(target.CanRedo);
+        }
+
+        [TestMethod]
+        public void AddAfterUndoAll()
+        {
+            var target = new UndoRedoList<int> { 1, 2 };
+            Assert.IsTrue(target.Undo());
+            Assert.IsTrue(target.Undo());
+            Assert.AreEqual(0, target.Count);
+
+            // Undone actions can't be redone and can't be undone any more.
+            target.Add(3);
+            Assert.IsFalse(target.CanRedo);
+            Assert.IsTrue (target.Undo());
+            Assert.AreEqual(0, target.Count);
+            Assert.IsFalse(target.CanUndo);
+
+            Assert.IsTrue (target.Redo());
+            Assert.IsFalse(target.Redo());
+            CollectionAssert.AreEqual(new[] { 3 }, target.ToArray());
+        }
+
+        [TestMethod]
+        public void AddAfterUndoAllWithWrapAround()
+        {
+            var target = new UndoRedoList<int>(maximumUndoTimes: 3) { 1, 2, 3, 4 };
+            while (target.Undo())
+                ;
+            CollectionAssert.AreEqual(new[] { 1 }, target.ToArray());
+
+            target.Add(9);
+            Assert.IsTrue (target.Undo());
+            Assert.IsFalse(target.Undo());
+            CollectionAssert.AreEqual(new[] { 1 }, target.ToArray());
+        }
+
+        [TestMethod]
+        public void FailedOperationIsNotRecorded()
+        {
+            var target = new UndoRedoList<int> { 1 };
+            target.ClearUndo();
+
+            Assert.ThrowsException<System.ArgumentOutOfRangeException>(() => target.Insert(-1, 9));
+            Assert.ThrowsException<System.ArgumentOutOfRangeException>(() => target.Insert( 2, 9));
+            Assert.ThrowsException<System.ArgumentOutOfRangeException>(() => target.RemoveAt(1));
+            Assert.ThrowsException<System.ArgumentOutOfRangeException>(() => target[1] = 9);
+            Assert.IsFalse(target.CanUndo);
+            CollectionAssert.AreEqual(new[] { 1 }, target.ToArray());
+        }
+
+        [TestMethod]
+        public void ClearEmptyListIsNotRecorded()
+        {
+            var target = new UndoRedoList<int>();
+            target.Clear();
+            Assert.IsFalse(target.CanUndo);
+        }
+
+        [TestMethod]
+        public void InsertAndRemoveAndExchange()
+        {
+            var target = new UndoRedoList<int> { 1, 2, 3 };
+            target.Insert(1, 10);
+            target.Remove(3);
+            target[0] = 20;
+            CollectionAssert.AreEqual(new[] { 20, 10, 2 }, target.ToArray());
+
+            Assert.IsTrue(target.Undo());
+            CollectionAssert.AreEqual(new[] { 1, 10, 2 }, target.ToArray());
+            Assert.IsTrue(target.Undo());
+            CollectionAssert.AreEqual(new[] { 1, 10, 2, 3 }, target.ToArray());
+            Assert.IsTrue(target.Undo());
+            CollectionAssert.AreEqual(new[] { 1, 2, 3 }, target.ToArray());
+
+            Assert.IsTrue(target.Redo());
+            Assert.IsTrue(target.Redo());
+            Assert.IsTrue(target.Redo());
+            CollectionAssert.AreEqual(new[] { 20, 10, 2 }, target.ToArray());
         }
 
         [TestMethod]

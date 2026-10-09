@@ -137,6 +137,7 @@ namespace Shos.Collections
         /// <summary>You can't undo actions while UndoEnabled is false.</summary>
         public bool UndoEnabled { get; set; } = true;
 
+        /// <summary>Initializes a new instance with the maximum undo times.</summary>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when maximumUndoTimes is 1 or less.</exception>
         public UndoRedoList(int maximumUndoTimes = ModuloArithmetic.DefaultDivisor)
             => undoBuffer = new UndoRedoRingBuffer<Action>(maximumUndoTimes);
@@ -203,6 +204,7 @@ namespace Shos.Collections
         public TElement this[int index] {
             get => List[index];
             set {
+                // Record the action after validating the index (List[index] throws when the index is out of range).
                 Add(new ExchangeAction(container: List, oldElement: List[index], newElement: value, index: index));
                 List[index] = value;
             }
@@ -210,12 +212,17 @@ namespace Shos.Collections
 
         public void Add(TElement element)
         {
+            ThrowIfReadOnly();
             Add(new AddAction(container: List, element: element, index: List.Count));
             List.Add(element);
         }
 
         public void Clear()
         {
+            ThrowIfReadOnly();
+            if (List.Count == 0)
+                return;
+
             var actionCollection = new ActionCollection { Container = List };
             for (var index = List.Count - 1; index >= 0; index--)
                 actionCollection.Add(new RemoveAction(container: List, element: List[index], index: index));
@@ -231,6 +238,9 @@ namespace Shos.Collections
 
         public void Insert(int index, TElement element)
         {
+            ThrowIfReadOnly();
+            if (index < 0 || index > List.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
             Add(new AddAction(container: List, element: element, index: index));
             List.Insert(index, element);
         }
@@ -246,6 +256,8 @@ namespace Shos.Collections
 
         public void RemoveAt(int index)
         {
+            ThrowIfReadOnly();
+            // Record the action after validating the index (List[index] throws when the index is out of range).
             Add(new RemoveAction(container: List, element: List[index], index: index));
             List.RemoveAt(index);
         }
@@ -254,6 +266,14 @@ namespace Shos.Collections
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         #endregion
+
+        // Actions are recorded before the inner list is modified so that CanUndo/CanRedo are up to date in CollectionChanged handlers.
+        // Therefore arguments must be validated before recording.
+        void ThrowIfReadOnly()
+        {
+            if (List.IsReadOnly)
+                throw new NotSupportedException("The collection is read-only.");
+        }
 
         void Add(Action action)
         {
@@ -271,6 +291,7 @@ namespace Shos.Collections
     /// <typeparam name="TElement">type of elements</typeparam>
     public class UndoRedoList<TElement> : UndoRedoList<TElement, List<TElement>>
     {
+        /// <summary>Initializes a new instance with the maximum undo times.</summary>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when maximumUndoTimes is 1 or less.</exception>
         public UndoRedoList(int maximumUndoTimes = ModuloArithmetic.DefaultDivisor) : base(maximumUndoTimes)
         {}

@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Shos.Collections
 {
     ///<summary>Ring buffer.</summary>
-    ///<seealso cref="https://en.wikipedia.org/wiki/Circular_buffer">Circular buffer (circular queue, cyclic buffer or ring buffer) - Wikipedia</seealso>
+    ///<seealso href="https://en.wikipedia.org/wiki/Circular_buffer">Circular buffer (circular queue, cyclic buffer or ring buffer) - Wikipedia</seealso>
     public class RingBuffer<TElement> : IEnumerable<TElement>
     {
         protected const int defaultSize = ModuloArithmetic.DefaultDivisor;
@@ -22,9 +23,13 @@ namespace Shos.Collections
             set => elements[index.Value] = value;
         }
 
+        /// <summary>Initializes a new instance with the size.</summary>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when size is 1 or less.</exception>
         public RingBuffer(int size = defaultSize)
         {
+            if (size <= 1)
+                throw new ArgumentOutOfRangeException(nameof(size), size, $"{nameof(size)} must be 2 or more.");
+
             elements    = new TElement[size];
             TopIndex    = new ModuloArithmetic(size);
             BottomIndex = new ModuloArithmetic(size, false);

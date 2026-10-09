@@ -122,7 +122,7 @@ namespace Shos.UndoRedoList.Tests
 
             // event handler
             static void ObservableCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-            { /* do domething */ }
+            { /* do something */ }
         }
     }
 }

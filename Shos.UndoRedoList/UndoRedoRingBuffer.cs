@@ -11,12 +11,16 @@
         public bool CanGoBackward => CurrentIndex.IsValid;
         public bool CanGoForward => CurrentIndex != BottomIndex;
 
+        /// <summary>Initializes a new instance with the size.</summary>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when size is 1 or less.</exception>
         public UndoRedoRingBuffer(int size = defaultSize) : base(size) => CurrentIndex = new ModuloArithmetic(size, false);
 
         public override void Add(TElement element)
         {
-            if (CurrentIndex.Next != TopIndex)
+            // Remove elements after the current element (they can't be redone any more).
+            if (!CurrentIndex.IsValid)
+                Clear();
+            else if (CurrentIndex != BottomIndex)
                 RemoveAfter(CurrentIndex.Next);
             base.Add(element);
             CurrentIndex = BottomIndex;
@@ -43,7 +47,8 @@
         {
             if (!CanGoForward)
                 return false;
-            CurrentIndex++;
+            // Invalid CurrentIndex means "before TopIndex".
+            CurrentIndex = CurrentIndex.IsValid ? CurrentIndex.Next : TopIndex;
             return true;
         }
     }

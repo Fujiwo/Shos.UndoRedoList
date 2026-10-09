@@ -8,17 +8,13 @@
     <Copyright>Copyright © 2020-2024 Fujio Kojima</Copyright>
     <PackageProjectUrl>https://github.com/Fujiwo/Shos.UndoRedoList</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Fujiwo/Shos.UndoRedoList</RepositoryUrl>
-    <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
+    <PackageTags>list ilist undo redo collection observablecollection</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Sample WPF app for UndoRedoObservableCollection.</Description>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Prism.Core" Version="8.1.97" />
-    <PackageReference Include="Roslynator.Analyzers" Version="4.12.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shos.UndoRedoList\Shos.UndoRedoList.csproj" />

@@ -38,21 +38,21 @@ namespace Shos.UndoRedoList.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void InitializeWidthOne()
+        public void InitializeWithOne()
         {
             var target = new ModuloArithmetic(1);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void InitializeWidthZero()
+        public void InitializeWithZero()
         {
             var target = new ModuloArithmetic(0);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void InitializeWidthMinusValue()
+        public void InitializeWithMinusValue()
         {
             var target = new ModuloArithmetic(-1);
         }
@@ -68,7 +68,7 @@ namespace Shos.UndoRedoList.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void MinusValue()
         {
-            var target = new ModuloArithmetic { Value = -1 };
+            var target = new ModuloArithmetic(3) { Value = -1 };
         }
 
         [TestMethod]
@@ -106,6 +106,16 @@ namespace Shos.UndoRedoList.Tests
             Assert.AreEqual(0, new ModuloArithmetic(3) { Value = 2 } - new ModuloArithmetic(3) { Value = 2 });
             Assert.AreEqual(1, new ModuloArithmetic(3) { Value = 2 } - new ModuloArithmetic(3) { Value = 1 });
             Assert.AreEqual(2, new ModuloArithmetic(3) { Value = 1 } - new ModuloArithmetic(3) { Value = 2 });
+        }
+
+        [TestMethod]
+        public void EqualsObject()
+        {
+            var target = new ModuloArithmetic(3) { Value = 1 };
+            Assert.IsTrue (target.Equals((object)new ModuloArithmetic(3) { Value = 1 }));
+            Assert.IsFalse(target.Equals((object)new ModuloArithmetic(3) { Value = 2 }));
+            Assert.IsFalse(target.Equals(null));
+            Assert.IsFalse(target.Equals("1"));
         }
     }
 }

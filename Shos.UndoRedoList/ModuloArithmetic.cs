@@ -3,19 +3,20 @@
 namespace Shos.Collections
 {
     ///<summary>Modular arithmetic.</summary>
-    ///<seealso cref="https://en.wikipedia.org/wiki/Modular_arithmetic">Modular arithmetic - Wikipedia</seealso>
+    ///<seealso href="https://en.wikipedia.org/wiki/Modular_arithmetic">Modular arithmetic - Wikipedia</seealso>
     public struct ModuloArithmetic : IEquatable<ModuloArithmetic>
     {
         public const int DefaultDivisor = 100;
 
         int value;
 
+        /// <summary>Value (0 or more and less than <see cref="Divisor"/>, or -1 when invalid).</summary>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when setting value is less than 0 or (Divisor or more).</exception>
         public int Value {
             get => value;
             set {
                 if (value < 0 || value >= Divisor)
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(value), value, $"{nameof(Value)} must be 0 or more and less than {nameof(Divisor)} ({Divisor}).");
                 this.value = value;
             }
         }
@@ -28,11 +29,12 @@ namespace Shos.Collections
         int PreviousValue => Value == 0 ? Value + Divisor - 1 : Value - 1;
         int NextValue     => (Value + 1) % Divisor;
 
+        /// <summary>Initializes a new instance with the divisor.</summary>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when divisor is 1 or less.</exception>
         public ModuloArithmetic(int divisor = DefaultDivisor, bool isValid = true)
         {
             if (divisor <= 1)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(divisor), divisor, $"{nameof(divisor)} must be 2 or more.");
             Divisor = divisor;
             value   = isValid ? 0 : -1;
         }
@@ -40,7 +42,7 @@ namespace Shos.Collections
         #region IEquatable<T> implementation
         public bool Equals(ModuloArithmetic item) => Value.Equals(item.Value);
         #endregion
-        public override bool Equals(object item) => Value.Equals(((ModuloArithmetic)item).Value);
+        public override bool Equals(object item) => item is ModuloArithmetic moduloArithmetic && Equals(moduloArithmetic);
         public override int GetHashCode() => Value.GetHashCode();
 
         public void MovePrevious() => Value = PreviousValue;
@@ -57,11 +59,12 @@ namespace Shos.Collections
         public static ModuloArithmetic operator ++(ModuloArithmetic item) => new ModuloArithmetic(item.Divisor) { Value = item.NextValue     };
         public static ModuloArithmetic operator --(ModuloArithmetic item) => new ModuloArithmetic(item.Divisor) { Value = item.PreviousValue };
 
+        /// <summary>Returns the distance from item2 to item1 (0 or more and less than Divisor).</summary>
         /// <exception cref="System.InvalidOperationException">Thrown when item1.Divisor and item2.Divisor are different.</exception>
         public static int operator -(ModuloArithmetic item1, ModuloArithmetic item2)
         {
             if (item1.Divisor != item2.Divisor)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"{nameof(Divisor)}s are different ({item1.Divisor} and {item2.Divisor}).");
 
             var result = item1.Value - item2.Value;
             return result >= 0 ? result : result + item1.Divisor;

@@ -41,6 +41,19 @@ namespace Shos.UndoRedoList.Tests
             Assert.AreEqual(6, notifyCollectionChangedActions.Count);
         }
 
+        [TestMethod]
+        public void CanUndoIsUpdatedInCollectionChanged()
+        {
+            var canUndoList = new List<bool>();
+            target.CollectionChanged += (_, _) => canUndoList.Add(target.CanUndo);
+            target.Add(100);
+            target.Insert(0, 200);
+            target[0] = 300;
+            target.RemoveAt(0);
+            target.Clear();
+            CollectionAssert.AreEqual(new[] { true, true, true, true, true }, canUndoList);
+        }
+
         void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => notifyCollectionChangedActions.Add(e.Action);
     }
 }

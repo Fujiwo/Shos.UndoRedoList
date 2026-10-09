@@ -61,7 +61,7 @@ Sample [WPF](https://docs.microsoft.com/visualstudio/designers/getting-started-w
 
 > In computer science, a circular buffer, circular queue, cyclic buffer or ring buffer is a data structure that uses a single, fixed-size buffer as if it were connected end-to-end. This structure lends itself easily to buffering data streams.
 
-### class [UndoRedoRingBuffer<TElement>](Shos.UndoRedoList/UndoRedoRingBuffer.cs) : RingBuffer`<TElement>`
+### class [UndoRedoRingBuffer`<TElement>`](Shos.UndoRedoList/UndoRedoRingBuffer.cs) : RingBuffer`<TElement>`
 
 Specialized RingBuffer for undo/redo.
 
@@ -211,7 +211,7 @@ The following image is a class diagram made from these *.puml files.
 
                 // event handler
                 static void ObservableCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-                { /* do domething */ }
+                { /* do something */ }
             }
         }
     }
