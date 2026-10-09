@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFrameworks>net8.0-windows;net10.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <Authors>Fujio Kojima</Authors>
     <Company>Sho's Software</Company>
-    <Copyright>Copyright © 2020-2024 Fujio Kojima</Copyright>
+    <Copyright>Copyright © 2020-2026 Fujio Kojima</Copyright>
     <PackageProjectUrl>https://github.com/Fujiwo/Shos.UndoRedoList</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Fujiwo/Shos.UndoRedoList</RepositoryUrl>
     <PackageTags>list ilist undo redo collection observablecollection</PackageTags>
