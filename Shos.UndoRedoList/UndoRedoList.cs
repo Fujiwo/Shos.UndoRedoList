@@ -146,8 +146,9 @@ namespace Shos.Collections
         {
             if (CanUndo) {
                 var action = undoBuffer.Current;
-                action.Undo();
+                // Move backward before undoing so that CanUndo/CanRedo are up to date in CollectionChanged handlers.
                 undoBuffer.GoBackward();
+                action.Undo();
                 return true;
             }
             return false;

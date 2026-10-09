@@ -54,6 +54,18 @@ namespace Shos.UndoRedoList.Tests
             CollectionAssert.AreEqual(new[] { true, true, true, true, true }, canUndoList);
         }
 
+        [TestMethod]
+        public void CanUndoAndCanRedoAreUpdatedInCollectionChangedWhileUndoRedo()
+        {
+            target.Add(100);
+            var states = new List<(bool canUndo, bool canRedo)>();
+            target.CollectionChanged += (_, _) => states.Add((target.CanUndo, target.CanRedo));
+
+            Assert.IsTrue(target.Undo());
+            Assert.IsTrue(target.Redo());
+            CollectionAssert.AreEqual(new[] { (false, true), (true, false) }, states);
+        }
+
         void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => notifyCollectionChangedActions.Add(e.Action);
     }
 }
