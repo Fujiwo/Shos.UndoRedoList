@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Shos.UndoRedoList.PerformanceTests/bin/Debug/netcoreapp3.1/Shos.UndoRedoList.PerformanceTests.dll",
+            "program": "${workspaceFolder}/Shos.UndoRedoList.PerformanceTests/bin/Debug/net8.0/Shos.UndoRedoList.PerformanceTests.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Shos.UndoRedoList.PerformanceTests",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console

@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
-    <Copyright>Copyright © 2020-2024 Fujio Kojima</Copyright>
+    <Copyright>Copyright © 2020-2026 Fujio Kojima</Copyright>
     <RepositoryUrl>https://github.com/Fujiwo/Shos.UndoRedoList</RepositoryUrl>
     <Authors>Fujio Kojima</Authors>
     <Company>Sho's Software</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Fujiwo/Shos.UndoRedoList</PackageProjectUrl>
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageTags>list ilist undo redo collection ovservablecollection</PackageTags>
+    <PackageTags>list ilist undo redo collection observablecollection</PackageTags>
     <Description>Tests for Shos.UndoRedoList.</Description>
   </PropertyGroup>
   <ItemGroup>
@@ -17,10 +17,6 @@
     <PackageReference Include="MSTest.TestAdapter" Version="3.2.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.2.2" />
     <PackageReference Include="coverlet.collector" Version="6.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.12.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
