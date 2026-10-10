@@ -25,12 +25,14 @@ list.Redo();           // avocado, banana
 - **Bounded history**: the number of undo steps is limited (default: 100), so memory use doesn't grow without limit.
 - **WPF / MVVM friendly**: `UndoRedoObservableCollection<T>` raises `CollectionChanged`, so you can bind it to `ItemsSource` directly.
 - **Thread-safe version**: `SynchronizedUndoRedoList<T>` can be used from multiple threads.
+- **Nullable-aware**: the API is annotated for nullable reference types.
 - **No dependencies**: a small library that depends only on the .NET base class library.
 
 ## Supported frameworks
 
 | Package version | Target frameworks |
 |---|---|
+| 1.0.8 | .NET 8.0, .NET 10.0 |
 | 1.0.7 | .NET 8.0, .NET 10.0 |
 | 1.0.6 | .NET 8.0, .NET 10.0 |
 | 1.0.5 | .NET 8.0 |
@@ -52,7 +54,7 @@ PM> Install-Package Shos.UndoRedoList
 Or, in your project file:
 
 ```xml
-<PackageReference Include="Shos.UndoRedoList" Version="1.0.7" />
+<PackageReference Include="Shos.UndoRedoList" Version="1.0.8" />
 ```
 
 All types are in the `Shos.Collections` namespace.
@@ -462,6 +464,13 @@ dotnet test Shos.UndoRedoList.Tests
 ```
 
 ## Release notes
+
+### 1.0.8
+
+- Changed: the API is now annotated for nullable reference types (e.g. `UndoRedoObservableCollection<T>.CollectionChanged` is `NotifyCollectionChangedEventHandler?`).
+- Changed: `Insert` with an invalid index now throws `ArgumentOutOfRangeException` with the standard .NET message, which includes the actual value.
+- Rewrote the source code in C# 12 (file-scoped namespaces, primary constructors, collection expressions, etc.). The public API is unchanged.
+- Replaced the PlantUML class diagram images with Mermaid class diagrams of the public types in the README.
 
 ### 1.0.7
 

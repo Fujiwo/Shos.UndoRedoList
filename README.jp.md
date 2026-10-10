@@ -25,12 +25,14 @@ list.Redo();           // avocado, banana
 - **履歴数の上限**: Undo できる回数には上限 (既定値: 100) があるため、メモリ使用量が際限なく増えることはありません。
 - **WPF / MVVM に対応**: `UndoRedoObservableCollection<T>` は `CollectionChanged` を発行するので、そのまま `ItemsSource` にバインドできます。
 - **スレッドセーフ版**: `SynchronizedUndoRedoList<T>` は複数のスレッドから使えます。
+- **null 許容参照型に対応**: API に null 許容参照型の注釈が付いています。
 - **依存関係なし**: .NET の基本クラスライブラリだけに依存する小さなライブラリです。
 
 ## 対応フレームワーク
 
 | パッケージのバージョン | 対象フレームワーク |
 |---|---|
+| 1.0.8 | .NET 8.0、.NET 10.0 |
 | 1.0.7 | .NET 8.0、.NET 10.0 |
 | 1.0.6 | .NET 8.0、.NET 10.0 |
 | 1.0.5 | .NET 8.0 |
@@ -52,7 +54,7 @@ PM> Install-Package Shos.UndoRedoList
 プロジェクト ファイルに直接書く場合:
 
 ```xml
-<PackageReference Include="Shos.UndoRedoList" Version="1.0.7" />
+<PackageReference Include="Shos.UndoRedoList" Version="1.0.8" />
 ```
 
 すべての型は `Shos.Collections` 名前空間にあります。
@@ -462,6 +464,13 @@ dotnet test Shos.UndoRedoList.Tests
 ```
 
 ## リリース ノート
+
+### 1.0.8
+
+- 変更: API に null 許容参照型の注釈を付けました (例: `UndoRedoObservableCollection<T>.CollectionChanged` は `NotifyCollectionChangedEventHandler?` になりました)。
+- 変更: 不正なインデックスで `Insert` を呼んだとき、実際の値を含む .NET 標準のメッセージで `ArgumentOutOfRangeException` を投げるようにしました。
+- ソース コードを C# 12 の書き方 (ファイル スコープ名前空間、プライマリ コンストラクター、コレクション式など) に書き換えました。公開 API に変更はありません。
+- README のクラス図を、PlantUML の画像から公開されている型の Mermaid クラス図に置き換えました。
 
 ### 1.0.7
 
