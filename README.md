@@ -310,11 +310,140 @@ In addition to the `IList<TElement>` members, `Undo()`, `Redo()`, `CanUndo`, `Ca
 
 Each change is recorded as an action that knows how to undo and redo itself (add ⇔ remove, replace ⇔ replace back). Actions are stored in a ring buffer of size `maximumUndoTimes`, so the history uses a fixed amount of memory, and the oldest actions are overwritten when it is full.
 
-The class diagram ([PlantUML](https://plantuml.com) sources are in [Shos.UndoRedoList/Documents/ClassDiagrams](https://github.com/Fujiwo/Shos.UndoRedoList/tree/master/Shos.UndoRedoList/Documents/ClassDiagrams)):
+The class diagrams of the public types (members of `IList<T>` are omitted):
 
-![Shos.UndoRedoList class diagram](https://raw.githubusercontent.com/Fujiwo/Shos.UndoRedoList/master/Shos.UndoRedoList/Documents/ClassDiagrams/UndoRedoList.all.small.png "Shos.UndoRedoList class diagram")
+### Collections
 
-[Larger class diagram image is here.](https://raw.githubusercontent.com/Fujiwo/Shos.UndoRedoList/master/Shos.UndoRedoList/Documents/ClassDiagrams/UndoRedoList.all.png)
+```mermaid
+classDiagram
+    class IList["IList&lt;TElement&gt;"] {
+        <<interface>>
+    }
+    class INotifyCollectionChanged {
+        <<interface>>
+    }
+    class IDisposable {
+        <<interface>>
+    }
+    class UndoRedoList2["UndoRedoList&lt;TElement, TList&gt;"] {
+        +bool CanUndo
+        +bool CanRedo
+        +bool UndoEnabled
+        +TList List
+        +UndoRedoList(int maximumUndoTimes = 100)
+        +Undo() bool
+        +Redo() bool
+        +ClearUndo() void
+        +BeginActions() void
+        +EndActions() void
+    }
+    class ActionScope["UndoRedoList&lt;TElement, TList&gt;.ActionScope"] {
+        +ActionScope(UndoRedoList&lt;TElement, TList&gt; list)
+        +Dispose() void
+    }
+    class DisabledUndoScope["UndoRedoList&lt;TElement, TList&gt;.DisabledUndoScope"] {
+        +DisabledUndoScope(UndoRedoList&lt;TElement, TList&gt; list)
+        +Dispose() void
+    }
+    class UndoRedoList1["UndoRedoList&lt;TElement&gt;"] {
+        +UndoRedoList(int maximumUndoTimes = 100)
+    }
+    class UndoRedoObservableCollection["UndoRedoObservableCollection&lt;TElement&gt;"] {
+        +event NotifyCollectionChangedEventHandler? CollectionChanged
+        +UndoRedoObservableCollection(int maximumUndoTimes = 100)
+    }
+    class SynchronizedUndoRedoList2["SynchronizedUndoRedoList&lt;TElement, TList&gt;"] {
+        +object SyncRoot
+        +bool CanUndo
+        +bool CanRedo
+        +bool UndoEnabled
+        +SynchronizedUndoRedoList(int maximumUndoTimes = 100)
+        +Undo() bool
+        +Redo() bool
+        +ClearUndo() void
+        +ExecuteAsOneAction(Action&lt;IList&lt;TElement&gt;&gt; action) void
+        +ExecuteAsOneAction&lt;TResult&gt;(Func&lt;IList&lt;TElement&gt;, TResult&gt; function) TResult
+        +ExecuteWithoutUndo(Action&lt;IList&lt;TElement&gt;&gt; action) void
+        +ToArray() TElement[]
+    }
+    class SynchronizedUndoRedoList1["SynchronizedUndoRedoList&lt;TElement&gt;"] {
+        +SynchronizedUndoRedoList(int maximumUndoTimes = 100)
+    }
+
+    IList <|.. UndoRedoList2
+    IList <|.. SynchronizedUndoRedoList2
+    UndoRedoList2 <|-- UndoRedoList1
+    UndoRedoList2 <|-- UndoRedoObservableCollection
+    INotifyCollectionChanged <|.. UndoRedoObservableCollection
+    SynchronizedUndoRedoList2 <|-- SynchronizedUndoRedoList1
+    IDisposable <|.. ActionScope
+    IDisposable <|.. DisabledUndoScope
+    ActionScope ..> UndoRedoList2
+    DisabledUndoScope ..> UndoRedoList2
+```
+
+### Supporting types
+
+```mermaid
+classDiagram
+    class IEnumerable["IEnumerable&lt;TElement&gt;"] {
+        <<interface>>
+    }
+    class IEquatable["IEquatable&lt;ModuloArithmetic&gt;"] {
+        <<interface>>
+    }
+    class RingBuffer["RingBuffer&lt;TElement&gt;"] {
+        +int Count
+        +ModuloArithmetic TopIndex
+        +ModuloArithmetic BottomIndex
+        +TElement this[ModuloArithmetic index]
+        +RingBuffer(int size = 100)
+        +Add(TElement element) void
+        +Clear() void
+        +RemoveAfter(ModuloArithmetic index) void
+        +Remove() bool
+    }
+    class UndoRedoRingBuffer["UndoRedoRingBuffer&lt;TElement&gt;"] {
+        +ModuloArithmetic CurrentIndex
+        +TElement Current
+        +bool CanGoBackward
+        +bool CanGoForward
+        +UndoRedoRingBuffer(int size = 100)
+        +Add(TElement element) void
+        +Clear() void
+        +GoBackward() bool
+        +GoForward() bool
+    }
+    class ModuloArithmetic {
+        <<struct>>
+        +int DefaultDivisor$
+        +int Value
+        +int Divisor
+        +bool IsValid
+        +ModuloArithmetic Previous
+        +ModuloArithmetic Next
+        +ModuloArithmetic InvalidItem
+        +ModuloArithmetic(int divisor = 100, bool isValid = true)
+        +Equals(ModuloArithmetic item) bool
+        +MovePrevious() void
+        +MoveNext() void
+        +operator ++(ModuloArithmetic item)$ ModuloArithmetic
+        +operator --(ModuloArithmetic item)$ ModuloArithmetic
+        +operator -(ModuloArithmetic item1, ModuloArithmetic item2)$ int
+        +operator ==(ModuloArithmetic item1, ModuloArithmetic item2)$ bool
+        +operator !=(ModuloArithmetic item1, ModuloArithmetic item2)$ bool
+    }
+    class EnumerableExtensions {
+        <<static>>
+        +ForEach&lt;TElement&gt;(IEnumerable&lt;TElement&gt; this, Action&lt;TElement&gt; action)$ void
+        +ReverseForEach&lt;TElement&gt;(IEnumerable&lt;TElement&gt; this, Action&lt;TElement&gt; action)$ void
+    }
+
+    IEnumerable <|.. RingBuffer
+    RingBuffer <|-- UndoRedoRingBuffer
+    IEquatable <|.. ModuloArithmetic
+    RingBuffer --> ModuloArithmetic
+```
 
 ## Repository structure
 
