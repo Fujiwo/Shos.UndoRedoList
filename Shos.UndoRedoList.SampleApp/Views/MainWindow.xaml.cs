@@ -1,18 +1,17 @@
 ﻿using System.Windows;
 
-namespace Shos.UndoRedoList.SampleApp.Views
+namespace Shos.UndoRedoList.SampleApp.Views;
+
+using ViewModels;
+
+public partial class MainWindow : Window
 {
-    using ViewModels;
+    readonly MainViewModel viewModel = new();
 
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        MainViewModel viewModel = new MainViewModel();
-
-        public MainWindow()
-        {
-            InitializeComponent();
-            DataContext = viewModel;
-            //Closing += (_, __) => viewModel.Dispose();
-        }
+        InitializeComponent();
+        DataContext = viewModel;
+        //Closing += (_, _) => viewModel.Dispose();
     }
 }
